@@ -1,5 +1,12 @@
 {
+  "scripts": {
+    "watch": "tailwindcss -i input.css -o output.css --watch",
+    "serve": "browser-sync start --server --files 'output.css, *.html'",
+    "dev": "concurrently \"npm run watch\" \"npm run serve\""
+  },
   "devDependencies": {
+    "browser-sync": "^3.0.2",
+    "concurrently": "^8.2.2",
     "tailwindcss": "^3.4.3"
   }
 }
