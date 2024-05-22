@@ -1,5 +1,4 @@
-/* src/styles.css */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -14,11 +13,12 @@ body {
 }
 
 .premium-button {
-    @apply py-2 px-4 rounded-sm text-white;
+    @apply inline-block py-2 px-4 rounded-sm text-white;
     background: linear-gradient(135deg, #DAA520, #ac882c);
     transition: background 0.3s ease;
 }
 
-.premium-button:hover {
-    background: linear-gradient(165deg, #DAA520, #ac882c);
+/* Heading styling */
+.premium-heading {
+    font-family: 'Playfair Display', serif;
 }
