@@ -12,3 +12,13 @@ body {
 .grayscale-img {
     filter: grayscale(100%);
 }
+
+.premium-button {
+    @apply py-2 px-4 rounded-sm text-white;
+    background: linear-gradient(135deg, #DAA520, #ac882c);
+    transition: background 0.3s ease;
+}
+
+.premium-button:hover {
+    background: linear-gradient(165deg, #DAA520, #ac882c);
+}
