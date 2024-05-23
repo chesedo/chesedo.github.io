@@ -1,24 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Raleway:wght@300;400;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Apply Raleway to the body */
 body {
-    @apply font-montserrat bg-off-white text-gray-800;
+    @apply font-raleway bg-off-white text-gray-800;
+}
+
+/* Apply Lato to all headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @apply font-lato;
 }
 
 .grayscale-img {
     filter: grayscale(100%);
-}
-
-.premium-button {
-    @apply inline-block py-2 px-4 rounded-sm text-white;
-    background: linear-gradient(135deg, #DAA520, #ac882c);
-    transition: background 0.3s ease;
-}
-
-/* Heading styling */
-.premium-heading {
-    font-family: 'Playfair Display', serif;
 }

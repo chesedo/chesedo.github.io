@@ -9,7 +9,8 @@ module.exports = {
         'gold-premium': '#DAA520',
       },
       fontFamily: {
-        'montserrat': ['Montserrat', 'sans-serif'],
+        'raleway': ['Raleway', 'sans-serif'],
+        'lato': ['Lato', 'sans-serif'],
       },
     },
   },
