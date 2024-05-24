@@ -1,6 +1,8 @@
 {
   "scripts": {
     "build:js": "cp node_modules/sandy-image/*.js ./",
+    "build:css": "tailwindcss -i input.css -o output.css",
+    "build": "npm run build:js && npm run build:css",
     "watch": "tailwindcss -i input.css -o output.css --watch",
     "serve": "browser-sync start --server --files 'output.css, *.html'",
     "dev": "concurrently \"npm run watch\" \"npm run serve\""
