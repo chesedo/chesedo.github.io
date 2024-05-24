@@ -46,6 +46,12 @@ jobs:
         with:
           # Upload entire repository
           path: '.'
+          exclude: |
+            **/node_modules/**
+            **/package-lock.json**
+            **/package.json**
+            **/README.md**
+            **/.github/**
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
