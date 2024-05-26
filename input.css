@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Raleway:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Raleway:wght@400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +6,7 @@
 
 /* Apply Raleway to the body */
 body {
-    @apply font-raleway bg-off-white text-gray-800;
+    @apply font-raleway bg-gray-50 text-gray-800;
 }
 
 /* Apply Lato to all headings */
