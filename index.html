@@ -112,14 +112,15 @@
         new SandyImage("#profile", {
             size: 5,
             steps: 8,
+            dampingFactor: 0.2,
             breezeFn: ({ frame, globalVx, globalVy }) => {
-                if (frame % 100 === 0) {
-                    if (frame < 1400) {
-                        globalVx += Math.random() * 0.8 - 0.6;
-                        globalVy += Math.random() * 0.8 - 0.35;
+                if (frame % 30 === 0) {
+                    if (frame < 1000) {
+                        globalVx += Math.random() * -0.5;
+                        globalVy += Math.random() * 0.1;
                     } else {
-                        globalVx += Math.random() * 0.5 - 0.25;
-                        globalVy += Math.random() * 0.5 - 0.25;
+                        globalVx += Math.random() * 1 - 0.5;
+                        globalVy += Math.random() * 1 - 0.5;
                     }
 
                     globalVx = Math.tanh(globalVx);

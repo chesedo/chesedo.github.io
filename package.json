@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build:js": "cp node_modules/sandy-image/*.js ./",
+    "build:js": "cp node_modules/sandy-image/sandy* ./",
     "build:css": "tailwindcss -i input.css -o output.css",
     "build": "npm run build:js && npm run build:css",
     "watch": "tailwindcss -i input.css -o output.css --watch",
@@ -10,7 +10,7 @@
   "devDependencies": {
     "browser-sync": "^3.0.2",
     "concurrently": "^8.2.2",
-    "sandy-image": "^1.0.2",
+    "sandy-image": "^1.0.3",
     "tailwindcss": "^3.4.3"
   }
 }
