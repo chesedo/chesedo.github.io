@@ -1,14 +1,14 @@
 {
   "scripts": {
-    "build:js": "cp node_modules/sandy-image/sandy* ./",
-    "build:css": "tailwindcss -i input.css -o output.css",
-    "build": "npm run build:js && npm run build:css",
-    "watch": "tailwindcss -i input.css -o output.css --watch",
-    "serve": "browser-sync start --server --files 'output.css, *.html'",
+    "build:js": "cp node_modules/sandy-image/sandy* ./content/",
+    "build:css": "tailwindcss -i input.css -o static/css/styles.css",
+    "build:zola": "zola build",
+    "build": "npm run build:js && npm run build:css && npm run build:zola",
+    "watch": "tailwindcss -i input.css -o static/css/styles.css --watch",
+    "serve": "zola serve",
     "dev": "concurrently \"npm run watch\" \"npm run serve\""
   },
   "devDependencies": {
-    "browser-sync": "^3.0.2",
     "concurrently": "^8.2.2",
     "sandy-image": "^1.0.3",
     "tailwindcss": "^3.4.3"

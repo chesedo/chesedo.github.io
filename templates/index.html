@@ -8,7 +8,7 @@
     <meta name="description"
         content="Pieter Engelbrecht, aka chesedo, is a Rust Programming Language Consultant and Freelancer with 3+ years of exclusive Rust experience.">
     <script defer data-domain="chesedo.me" src="https://plausible.io/js/script.tagged-events.js"></script>
-    <link rel="stylesheet" href="output.css">
+    <link rel="stylesheet" href={{ get_url(path = "css/styles.css") }}>
 </head>
 
 <body class="flex flex-col items-center justify-between min-h-screen">
@@ -18,7 +18,7 @@
 
         <!-- Profile Photo -->
         <div class="mb-6 md:mb-0 max-h-full">
-            <img id="profile" src="formal.jpg" alt="Pieter Engelbrecht's Photo"
+            <img id="profile" src={{ get_url(path = "formal.jpg") }} alt="Pieter Engelbrecht's Photo"
                 class="object-cover max-h-full md:max-h-screen mx-auto" width="366" height="700">
         </div>
 
@@ -96,7 +96,7 @@
                     <span class="sr-only">GitHub</span></a>
                 <a href="https://softwarecrafters.slack.com/team/U0759FDNM2L" target="_blank"
                     class="grayscale hover:grayscale-0 focus:outline-none focus:ring-2 focus:ring-green-600 plausible-event-name=Clicked+Software+Crafters"><img
-                        src="software-craftsmanship.png" alt="Software Craftsmanship Slack" class="w-8 h-8" width="32"
+                        src={{ get_url(path = "images/software-craftsmanship.png") }} alt="Software Craftsmanship Slack" class="w-8 h-8" width="32"
                         height="32"></a>
             </div>
         </div>

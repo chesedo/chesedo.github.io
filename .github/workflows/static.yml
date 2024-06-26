@@ -37,6 +37,11 @@ jobs:
           node-version: '16'
       - name: Install dependencies
         run: npm install
+      - name: Install Zola
+        run: |
+          ZOLA_VERSION=0.17.2
+          curl -L https://github.com/getzola/zola/releases/download/v${ZOLA_VERSION}/zola-v${ZOLA_VERSION}-x86_64-unknown-linux-gnu.tar.gz | tar xz
+          sudo mv zola /usr/local/bin
       - name: Build the project
         run: npm run build
       - name: Setup Pages
@@ -44,14 +49,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
-          exclude: |
-            **/node_modules/**
-            **/package-lock.json**
-            **/package.json**
-            **/README.md**
-            **/.github/**
+          path: 'public'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
