@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build:js": "cp node_modules/sandy-image/sandy* ./content/",
+    "build:js": "cp node_modules/sandy-image/sandy* ./static/",
     "build:css": "tailwindcss -i input.css -o static/css/styles.css",
     "build:zola": "zola build",
     "build": "npm run build:js && npm run build:css && npm run build:zola",

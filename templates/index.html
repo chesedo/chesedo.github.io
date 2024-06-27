@@ -4,50 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pieter Engelbrecht - Rust Consultant</title>
-    <meta name="description"
-        content="Pieter Engelbrecht, aka chesedo, is a Rust Programming Language Consultant and Freelancer with 3+ years of exclusive Rust experience.">
+    <meta name="description" content="{{ section.description }}">
+    <meta name="generator" content="Zola">
+    <title>{{ section.title }} - Rust Consultant</title>
     <script defer data-domain="chesedo.me" src="https://plausible.io/js/script.tagged-events.js"></script>
-    <link rel="stylesheet" href={{ get_url(path = "css/styles.css") }}>
+    <link rel="stylesheet" href="{{ get_url(path = "css/styles.css") }}">
 </head>
 
 <body class="flex flex-col items-center justify-between min-h-screen">
 
     <!-- Main container -->
-    <div class="container p-6 flex-1 flex flex-col md:flex-row md:items-center md:justify-between">
+    <div class="container p-6 flex-1 flex flex-col md:flex-row md:items-center md:justify-between" id="home">
 
         <!-- Profile Photo -->
         <div class="mb-6 md:mb-0 max-h-full">
-            <img id="profile" src={{ get_url(path = "formal.jpg") }} alt="Pieter Engelbrecht's Photo"
+            <img id="profile" src="{{ get_url(path = "images/formal.jpg") }}" alt="Pieter Engelbrecht's Photo"
                 class="object-cover max-h-full md:max-h-screen mx-auto" width="366" height="700">
         </div>
 
         <!-- Profile Content -->
         <div class="md:pl-12">
-            <h1 class="text-4xl font-semibold">Pieter Engelbrecht</h1>
-            <h2 class="mb-4 text-yellow-600">Aka. chesedo</h2>
-            <h3 class="text-xl mb-4">Rust Programming Language Consultant / Freelancer</h3>
-            <p class="mb-6">
-                With 3+ years of exclusive Rust experience, including an undergrad thesis on procedural macros, I offer
-                specialized services for:
-            </p>
-            <ul class="list-disc ml-6 mt-2 mb-6">
-                <li>Architecting Rust projects</li>
-                <li>Senior role for teams adopting Rust</li>
-                <li>One-off Rust projects</li>
-                <li>Maintaining Rust code</li>
-            </ul>
-            <p class="mb-6">
-                As a Software Craftsmanship advocate, I emphasize:
-            </p>
-            <ul class="list-disc ml-6 mt-2 mb-6">
-                <li>Test Driven Development (TDD) and Continuous Integration (CI)</li>
-                <li>Effective use of design patterns, which includes knowing when not to use them</li>
-            </ul>
-            <p class="mb-6">
-                I am also available to teach these crafting skills, Rust, or creating procedural macros to anyone
-                interested.
-            </p>
+            {{ section.content | safe }}
+
             <p class="mb-6">
                 Feel free to connect with me on these channels:
             </p>
@@ -96,7 +74,7 @@
                     <span class="sr-only">GitHub</span></a>
                 <a href="https://softwarecrafters.slack.com/team/U0759FDNM2L" target="_blank"
                     class="grayscale hover:grayscale-0 focus:outline-none focus:ring-2 focus:ring-green-600 plausible-event-name=Clicked+Software+Crafters"><img
-                        src={{ get_url(path = "images/software-craftsmanship.png") }} alt="Software Craftsmanship Slack" class="w-8 h-8" width="32"
+                        src="{{ get_url(path = "images/software-craftsmanship.png") }}" alt="Software Craftsmanship Slack" class="w-8 h-8" width="32"
                         height="32"></a>
             </div>
         </div>
