@@ -3,14 +3,14 @@
 {% block title %}{{ section.title }} - Rust Consultant{% endblock title %}
 {% block description %}{{ section.description }}{% endblock description %}
 
-{% block header %}{% endblock header %}
-
-{% block content %}
+{% block header %}
 <a href="{{ get_url(path="@/blog/_index.md") }}"
    class="w-full bg-yellow-50 border-y border-yellow-500 hover:border-yellow-600 py-2 text-center text-yellow-700 hover:text-yellow-900 transition duration-300 text-lg font-semibold">
     Explore my blog posts &rarr;
 </a>
+{% endblock header %}
 
+{% block content %}
 <!-- Main container -->
 <div class="container p-6 flex-1 flex flex-col md:flex-row md:items-center md:justify-between" id="home">
 
