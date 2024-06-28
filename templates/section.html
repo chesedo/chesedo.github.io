@@ -1,6 +1,9 @@
 {% extends "three_column_layout.html" %}
 {% import "macros.html" as macros %}
 
+{% block title %}{{ section.title }} - {{ config.title }}{% endblock title %}
+{% block description %}{{ section.description }}{% endblock description %}
+
 {% block main_content %}
 <h1 class="text-4xl font-bold mb-4 text-gray-800">{{ section.title }}</h1>
 <div class="prose max-w-none mb-8">

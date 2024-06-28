@@ -1,6 +1,9 @@
 {% extends "three_column_layout.html" %}
 {% import "macros.html" as macros %}
 
+{% block title %}Posts tagged with "{{ term.name }}" - {{ config.title }}{% endblock title %}
+{% block description %}Browse all posts tagged with "{{ term.name }}"{% endblock description %}
+
 {% block main_content %}
 <h1 class="text-4xl font-bold mb-4 text-gray-800">Posts tagged with "{{ term.name }}"</h1>
 
