@@ -1,17 +1,14 @@
-{% extends "base.html" %}
+{% extends "three_column_layout.html" %}
 {% import "macros.html" as macros %}
 
-{% block content %}
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="md:col-span-2">
-        <h1 class="text-4xl font-bold mb-4 text-gray-800">{{ section.title }}</h1>
-        <div class="prose max-w-none mb-8">
-            {{ section.content | safe }}
-        </div>
+{% block title %}{{ section.title }} - {{ config.title }}{% endblock title %}
+{% block description %}{{ section.description }}{% endblock description %}
 
-        {{ macros::list(pages = section.pages) }}
-    </div>
-
-    {% include "partials/sidebar.html" %}
+{% block main_content %}
+<h1 class="text-4xl font-bold mb-4 text-gray-800">{{ section.title }}</h1>
+<div class="prose max-w-none mb-8">
+    {{ section.content | safe }}
 </div>
-{% endblock content %}
+
+{{ macros::list(pages = section.pages) }}
+{% endblock main_content %}

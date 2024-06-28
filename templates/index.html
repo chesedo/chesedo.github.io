@@ -1,115 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{{ section.description }}">
-    <meta name="generator" content="Zola">
-    <title>{{ section.title }} - Rust Consultant</title>
-    <script defer data-domain="chesedo.me" src="https://plausible.io/js/script.tagged-events.js"></script>
-    <link rel="stylesheet" href="{{ get_url(path = "css/styles.css") }}">
-</head>
+{% block title %}{{ section.title }} - Rust Consultant{% endblock title %}
+{% block description %}{{ section.description }}{% endblock description %}
 
-<body class="flex flex-col items-center justify-between min-h-screen">
-    <a href="{{ get_url(path="@/blog/_index.md") }}"
-    class="w-full bg-yellow-50 border-y border-yellow-500 hover:border-yellow-600 py-2 text-center text-yellow-700 hover:text-yellow-900 transition duration-300 text-lg font-semibold">
-        Explore my blog posts &rarr;
-    </a>
+{% block header %}
+<a href="{{ get_url(path="@/blog/_index.md") }}"
+   class="w-full bg-yellow-50 border-y border-yellow-500 hover:border-yellow-600 py-2 text-center text-yellow-700 hover:text-yellow-900 transition duration-300 text-lg font-semibold">
+    Explore my blog posts &rarr;
+</a>
+{% endblock header %}
 
-    <!-- Main container -->
-    <div class="container p-6 flex-1 flex flex-col md:flex-row md:items-center md:justify-between" id="home">
+{% block content %}
+<!-- Main container -->
+<div class="container p-6 flex-1 flex flex-col md:flex-row md:items-center md:justify-between" id="home">
 
-        <!-- Profile Photo -->
-        <div class="mb-6 md:mb-0 max-h-full">
-            <img id="profile" src="{{ get_url(path = "images/formal.jpg") }}" alt="{{ config.extra.author_name }}'s Photo"
-                class="object-cover max-h-full md:max-h-screen mx-auto" width="366" height="700">
-        </div>
-
-        <!-- Profile Content -->
-        <div class="md:pl-12">
-            {{ section.content | safe }}
-
-            <p class="mb-6">
-                Feel free to connect with me on these channels:
-            </p>
-
-            <div class="flex space-x-4 mb-6">
-                <a href="https://www.linkedin.com/in/pengelbrecht2627/" target="_blank"
-                    class="text-gray-600 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 plausible-event-name=Clicked+LinkedIn">
-                    <svg width="32" height="32" fill="currentColor" version="1.1" viewBox="-0.5 0 16 16"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="m14 0.5h-13-0.014c-0.6 0-1.1 0.48-1.1 1.1v13c7e-3 0.6 0.49 1.1 1.1 1.1h0.014 13 0.014c0.6 0 1.1-0.48 1.1-1.1v-13c-0.0095-0.6-0.5-1.1-1.1-1.1h-0.014 5e-4zm-9.4 13h-2.2v-7.2h2.2zm-1.1-8.1c-0.71 0-1.3-0.58-1.3-1.3s0.58-1.3 1.3-1.3 1.3 0.58 1.3 1.3v2e-3c0 0.71-0.58 1.3-1.3 1.3h-0.0015zm9.4 8.1h-2.2v-3.5c0-0.83-0.017-1.9-1.2-1.9-1.2 0-1.3 0.9-1.3 1.8v3.5h-2.2v-7.2h2.1v0.98h0.029c0.41-0.7 1.2-1.2 2-1.2 0.03 0 0.06 5e-4 0.09 0.0015h-0.0045c2.2 0 2.7 1.5 2.7 3.4v3.9z" />
-                    </svg>
-                    <span class="sr-only">LinkedIn</span></a>
-                <a href="https://users.rust-lang.org/u/chesedo" target="_blank"
-                    class="grayscale hover:grayscale-0 focus:outline-none focus:ring-2 focus:ring-yellow-600 plausible-event-name=Clicked+Rust+Lang">
-                    <svg width="32px" height="32px" version="1.1" viewBox="0 0 32 32"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <defs>
-                                <radialGradient id="a" cx="-492" cy="-883" r="14"
-                                    gradientTransform="matrix(.92 -.53 -.32 -.55 187 -734)"
-                                    gradientUnits="userSpaceOnUse">
-                                    <stop stop-color="#7d7d7d" offset="0" />
-                                    <stop stop-color="#7e7c7a" offset=".27" />
-                                    <stop stop-color="#817871" offset=".45" />
-                                    <stop stop-color="#867162" offset=".61" />
-                                    <stop stop-color="#8d684c" offset=".75" />
-                                    <stop stop-color="#965c30" offset=".89" />
-                                    <stop stop-color="#a04f12" offset="1" />
-                                </radialGradient>
-                            </defs>
-                        </defs>
-                        <path
-                            d="m15 4.6a0.88 0.88 0 1 1 0.88 0.88 0.88 0.88 0 0 1-0.88-0.88m-11 8a0.88 0.88 0 1 1 0.88 0.88 0.88 0.88 0 0 1-0.88-0.88m21 0.041a0.88 0.88 0 1 1 0.88 0.88 0.88 0.88 0 0 1-0.88-0.88m-19 1.2a0.81 0.81 0 0 0 0.41-1.1l-0.39-0.89h1.5v7h-3.1a11 11 0 0 1-0.35-4.2zm6.5 0.17v-2.1h3.7c0.19 0 1.3 0.22 1.3 1.1 0 0.71-0.88 0.97-1.6 0.97zm-5 11a0.88 0.88 0 1 1 0.88 0.88 0.88 0.88 0 0 1-0.88-0.88m13 0.041a0.88 0.88 0 1 1 0.88 0.88 0.88 0.88 0 0 1-0.88-0.88m0.27-2a0.81 0.81 0 0 0-0.96 0.62l-0.44 2.1a11 11 0 0 1-9.1-0.044l-0.44-2.1a0.81 0.81 0 0 0-0.96-0.62l-1.8 0.39a11 11 0 0 1-0.95-1.1h8.9c0.1 0 0.17-0.018 0.17-0.11v-3.2c0-0.091-0.067-0.11-0.17-0.11h-2.6v-2h2.8a1.8 1.8 0 0 1 1.7 1.5c0.11 0.44 0.36 1.9 0.53 2.3 0.17 0.51 0.85 1.5 1.6 1.5h4.6a11 11 0 0 1-1 1.2zm4.9-8.3a11 11 0 0 1 0.023 1.9h-1.1c-0.11 0-0.16 0.073-0.16 0.18v0.51c0 1.2-0.68 1.5-1.3 1.5-0.57 0.064-1.2-0.24-1.3-0.59a3.8 3.8 0 0 0-1.8-3c1.1-0.7 2.2-1.7 2.2-3.1a3.5 3.5 0 0 0-1.7-2.9 4.8 4.8 0 0 0-2.3-0.77h-12a11 11 0 0 1 6.1-3.4l1.4 1.4a0.81 0.81 0 0 0 1.1 0.028l1.5-1.5a11 11 0 0 1 7.5 5.3l-1 2.4a0.81 0.81 0 0 0 0.41 1.1zm2.6 0.038-0.035-0.36 1.1-1a0.45 0.45 0 0 0-0.014-0.63 0.46 0.46 0 0 0-0.13-0.086l-1.4-0.51-0.11-0.36 0.86-1.2a0.45 0.45 0 0 0-0.14-0.62 0.46 0.46 0 0 0-0.14-0.058l-1.4-0.24-0.17-0.33 0.61-1.3a0.45 0.45 0 0 0-0.25-0.58 0.45 0.45 0 0 0-0.16-0.031l-1.5 0.051-0.24-0.28 0.34-1.4a0.45 0.45 0 0 0-0.36-0.52 0.46 0.46 0 0 0-0.15 0l-1.4 0.33-0.28-0.23 0.052-1.5a0.45 0.45 0 0 0-0.46-0.44 0.45 0.45 0 0 0-0.15 0.03l-1.3 0.61-0.33-0.17-0.24-1.4a0.45 0.45 0 0 0-0.53-0.34 0.46 0.46 0 0 0-0.14 0.058l-1.2 0.86-0.35-0.11-0.51-1.4a0.45 0.45 0 0 0-0.59-0.23 0.47 0.47 0 0 0-0.13 0.085l-1 1.1-0.36-0.035-0.77-1.3a0.45 0.45 0 0 0-0.73 0l-0.77 1.3-0.36 0.035-1-1.1a0.45 0.45 0 0 0-0.63 0.016 0.47 0.47 0 0 0-0.085 0.13l-0.52 1.4-0.35 0.11-1.2-0.85a0.45 0.45 0 0 0-0.62 0.14 0.46 0.46 0 0 0-0.058 0.14l-0.24 1.4-0.33 0.17-1.3-0.61a0.45 0.45 0 0 0-0.58 0.25 0.47 0.47 0 0 0-0.03 0.15l0.051 1.5-0.28 0.23-1.4-0.34a0.45 0.45 0 0 0-0.52 0.36 0.46 0.46 0 0 0 0 0.15l0.34 1.4-0.23 0.28-1.5-0.051a0.45 0.45 0 0 0-0.41 0.61l0.61 1.3-0.17 0.33-1.4 0.24a0.45 0.45 0 0 0-0.34 0.53 0.46 0.46 0 0 0 0.058 0.14l0.86 1.2-0.11 0.36-1.4 0.51a0.45 0.45 0 0 0-0.23 0.59 0.44 0.44 0 0 0 0.086 0.13l1.1 1-0.035 0.36-1.3 0.77a0.45 0.45 0 0 0 0 0.73l1.3 0.77 0.035 0.36-1.1 1a0.45 0.45 0 0 0 0.016 0.63 0.46 0.46 0 0 0 0.13 0.085l1.4 0.51 0.11 0.36-0.86 1.2a0.45 0.45 0 0 0 0.14 0.62 0.46 0.46 0 0 0 0.14 0.058l1.4 0.24 0.17 0.33-0.61 1.3a0.45 0.45 0 0 0 0.26 0.58 0.47 0.47 0 0 0 0.15 0.03l1.5-0.051 0.23 0.28-0.34 1.4a0.45 0.45 0 0 0 0.36 0.52 0.43 0.43 0 0 0 0.16 0l1.4-0.34 0.28 0.23-0.052 1.5a0.45 0.45 0 0 0 0.46 0.44 0.44 0.44 0 0 0 0.15-0.03l1.3-0.61 0.33 0.17 0.24 1.4a0.45 0.45 0 0 0 0.53 0.34 0.43 0.43 0 0 0 0.14-0.058l1.2-0.86 0.36 0.11 0.51 1.4a0.45 0.45 0 0 0 0.59 0.23 0.46 0.46 0 0 0 0.13-0.085l1-1.1 0.36 0.036 0.77 1.3a0.45 0.45 0 0 0 0.63 0.11 0.44 0.44 0 0 0 0.11-0.11l0.77-1.3 0.36-0.036 1 1.1a0.45 0.45 0 0 0 0.63-0.016 0.46 0.46 0 0 0 0.085-0.13l0.51-1.4 0.36-0.11 1.2 0.86a0.45 0.45 0 0 0 0.62-0.14 0.46 0.46 0 0 0 0.058-0.14l0.24-1.4 0.33-0.17 1.3 0.61a0.45 0.45 0 0 0 0.58-0.25 0.47 0.47 0 0 0 0.03-0.15l-0.051-1.5 0.28-0.23 1.4 0.34a0.45 0.45 0 0 0 0.52-0.36 0.48 0.48 0 0 0 0-0.16l-0.33-1.4 0.23-0.28 1.5 0.051a0.45 0.45 0 0 0 0.44-0.46 0.43 0.43 0 0 0-0.03-0.15l-0.61-1.3 0.17-0.33 1.4-0.24a0.45 0.45 0 0 0 0.34-0.53 0.46 0.46 0 0 0-0.06-0.14l-0.86-1.2 0.11-0.36 1.4-0.51a0.45 0.45 0 0 0 0.23-0.59 0.44 0.44 0 0 0-0.086-0.13l-1.1-1 0.035-0.36 1.3-0.77a0.45 0.45 0 0 0 0-0.73z"
-                            fill="url(#a)" stroke-width="1.1" />
-                    </svg>
-                    <span class="sr-only">Rust forum</span></a>
-                </a>
-                <a href="https://github.com/chesedo" target="_blank"
-                    class="text-gray-600 hover:text-black focus:outline-none focus:ring-2 focus:ring-black plausible-event-name=Clicked+GitHub">
-                    <svg width="32px" height="32px" fill="currentColor" version="1.1" viewBox="0 0 32 32"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="m16 1.4c-8.3 0-15 6.7-15 15 0 6.6 4.2 12 10 14l0.11 0.031c0.75 0.14 1-0.32 1-0.72 0-0.36-0.012-1.3-0.019-2.5-4.2 0.9-5.1-2-5.1-2-0.29-0.92-0.88-1.7-1.7-2.2l-0.016-9e-3c-1.4-0.93 0.1-0.91 0.1-0.91 0.99 0.14 1.8 0.72 2.3 1.5l8e-3 0.015c0.55 1 1.6 1.7 2.8 1.7 0.58 0 1.1-0.15 1.6-0.42l-0.016 8e-3c0.072-0.79 0.42-1.5 0.95-2l1e-3 -1e-3c-3.3-0.38-6.8-1.7-6.8-7.4 0-0.027-1e-3 -0.058-1e-3 -0.089 0-1.5 0.59-2.9 1.5-3.9l-3e-3 4e-3c-0.2-0.54-0.32-1.2-0.32-1.8 0-0.78 0.17-1.5 0.46-2.2l-0.014 0.034s1.3-0.4 4.1 1.5c1.1-0.32 2.4-0.51 3.7-0.51s2.6 0.18 3.8 0.53l-0.1-0.024c2.8-1.9 4.1-1.5 4.1-1.5 0.28 0.64 0.45 1.4 0.45 2.2 0 0.64-0.11 1.3-0.31 1.8l0.012-0.038c0.95 1 1.5 2.4 1.5 3.9 0 0.031 0 0.061-1e-3 0.091v-5e-3c0 5.8-3.5 7-6.8 7.4 0.63 0.65 1 1.5 1 2.5 0 0.093-4e-3 0.19-0.011 0.28l1e-3 -0.012c0 2-0.019 3.6-0.019 4.1 0 0.39 0.26 0.86 1 0.71 6-2 10-7.6 10-14 0-8.3-6.7-15-15-15h-0.019 1e-3z" />
-                    </svg>
-                    <span class="sr-only">GitHub</span></a>
-                <a href="https://softwarecrafters.slack.com/team/U0759FDNM2L" target="_blank"
-                    class="grayscale hover:grayscale-0 focus:outline-none focus:ring-2 focus:ring-green-600 plausible-event-name=Clicked+Software+Crafters"><img
-                        src="{{ get_url(path = "images/software-craftsmanship.png") }}" alt="Software Craftsmanship Slack" class="w-8 h-8" width="32"
-                        height="32"></a>
-            </div>
-        </div>
+    <!-- Profile Photo -->
+    <div class="mb-6 md:mb-0 max-h-full">
+        <img id="profile" src="{{ get_url(path = "images/formal.jpg") }}" alt="{{ config.extra.author_name }}'s Photo"
+             class="object-cover max-h-full md:max-h-screen mx-auto" width="366" height="700">
     </div>
 
-    {% include "partials/footer.html" %}
+    <!-- Profile Content -->
+    <div class="md:pl-12">
+        {{ section.content | safe }}
 
-    <script src="{{ get_url(path = "sandy.js") }}"></script>
-    <script>
-        new SandyImage("#profile", {
-            size: 5,
-            steps: 8,
-            dampingFactor: 0.2,
-            breezeFn: ({ frame, globalVx, globalVy }) => {
-                if (frame % 30 === 0) {
-                    if (frame < 1000) {
-                        globalVx += Math.random() * -0.5;
-                        globalVy += Math.random() * 0.1;
-                    } else {
-                        globalVx += Math.random() * 1 - 0.5;
-                        globalVy += Math.random() * 1 - 0.5;
-                    }
+        <p class="mb-6">
+            Feel free to connect with me on these channels:
+        </p>
 
-                    globalVx = Math.tanh(globalVx);
-                    globalVy = Math.tanh(globalVy);
-                }
+        <div class="flex space-x-4 mb-6">
+            <a href="https://www.linkedin.com/in/pengelbrecht2627/" target="_blank"
+               class="text-gray-600 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                <svg width="32" height="32" fill="currentColor" version="1.1" viewBox="-0.5 0 16 16"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="m14 0.5h-13-0.014c-0.6 0-1.1 0.48-1.1 1.1v13c7e-3 0.6 0.49 1.1 1.1 1.1h0.014 13 0.014c0.6 0 1.1-0.48 1.1-1.1v-13c-0.0095-0.6-0.5-1.1-1.1-1.1h-0.014 5e-4zm-9.4 13h-2.2v-7.2h2.2zm-1.1-8.1c-0.71 0-1.3-0.58-1.3-1.3s0.58-1.3 1.3-1.3 1.3 0.58 1.3 1.3v2e-3c0 0.71-0.58 1.3-1.3 1.3h-0.0015zm9.4 8.1h-2.2v-3.5c0-0.83-0.017-1.9-1.2-1.9-1.2 0-1.3 0.9-1.3 1.8v3.5h-2.2v-7.2h2.1v0.98h0.029c0.41-0.7 1.2-1.2 2-1.2 0.03 0 0.06 5e-4 0.09 0.0015h-0.0045c2.2 0 2.7 1.5 2.7 3.4v3.9z" />
+                </svg>
+                <span class="sr-only">LinkedIn</span></a>
+            <a href="https://users.rust-lang.org/u/chesedo" target="_blank"
+               class="grayscale hover:grayscale-0 focus:outline-none focus:ring-2 focus:ring-yellow-600">
+                <svg width="32px" height="32px" version="1.1" viewBox="0 0 32 32"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <defs>
+                            <radialGradient id="a" cx="-492" cy="-883" r="14"
+                                            gradientTransform="matrix(.92 -.53 -.32 -.55 187 -734)"
+                                            gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#7d7d7d" offset="0" />
+                                <stop stop-color="#7e7c7a" offset=".27" />
+                                <stop stop-color="#817871" offset=".45" />
+                                <stop stop-color="#867162" offset=".61" />
+                                <stop stop-color="#8d684c" offset=".75" />
+                                <stop stop-color="#965c30" offset=".89" />
+                                <stop stop-color="#a04f12" offset="1" />
+                            </radialGradient>
+                        </defs>
+                    </defs>
+                    <path
+                        d="m15 4.6a0.88 0.88 0 1 1 0.88 0.88 0.88 0.88 0 0 1-0.88-0.88m-11 8a0.88 0.88 0 1 1 0.88 0.88 0.88 0.88 0 0 1-0.88-0.88m21 0.041a0.88 0.88 0 1 1 0.88 0.88 0.88 0.88 0 0 1-0.88-0.88m-19 1.2a0.81 0.81 0 0 0 0.41-1.1l-0.39-0.89h1.5v7h-3.1a11 11 0 0 1-0.35-4.2zm6.5 0.17v-2.1h3.7c0.19 0 1.3 0.22 1.3 1.1 0 0.71-0.88 0.97-1.6 0.97zm-5 11a0.88 0.88 0 1 1 0.88 0.88 0.88 0.88 0 0 1-0.88-0.88m13 0.041a0.88 0.88 0 1 1 0.88 0.88 0.88 0.88 0 0 1-0.88-0.88m0.27-2a0.81 0.81 0 0 0-0.96 0.62l-0.44 2.1a11 11 0 0 1-9.1-0.044l-0.44-2.1a0.81 0.81 0 0 0-0.96-0.62l-1.8 0.39a11 11 0 0 1-0.95-1.1h8.9c0.1 0 0.17-0.018 0.17-0.11v-3.2c0-0.091-0.067-0.11-0.17-0.11h-2.6v-2h2.8a1.8 1.8 0 0 1 1.7 1.5c0.11 0.44 0.36 1.9 0.53 2.3 0.17 0.51 0.85 1.5 1.6 1.5h4.6a11 11 0 0 1-1 1.2zm4.9-8.3a11 11 0 0 1 0.023 1.9h-1.1c-0.11 0-0.16 0.073-0.16 0.18v0.51c0 1.2-0.68 1.5-1.3 1.5-0.57 0.064-1.2-0.24-1.3-0.59a3.8 3.8 0 0 0-1.8-3c1.1-0.7 2.2-1.7 2.2-3.1a3.5 3.5 0 0 0-1.7-2.9 4.8 4.8 0 0 0-2.3-0.77h-12a11 11 0 0 1 6.1-3.4l1.4 1.4a0.81 0.81 0 0 0 1.1 0.028l1.5-1.5a11 11 0 0 1 7.5 5.3l-1 2.4a0.81 0.81 0 0 0 0.41 1.1zm2.6 0.038-0.035-0.36 1.1-1a0.45 0.45 0 0 0-0.014-0.63 0.46 0.46 0 0 0-0.13-0.086l-1.4-0.51-0.11-0.36 0.86-1.2a0.45 0.45 0 0 0-0.14-0.62 0.46 0.46 0 0 0-0.14-0.058l-1.4-0.24-0.17-0.33 0.61-1.3a0.45 0.45 0 0 0-0.25-0.58 0.45 0.45 0 0 0-0.16-0.031l-1.5 0.051-0.24-0.28 0.34-1.4a0.45 0.45 0 0 0-0.36-0.52 0.46 0.46 0 0 0-0.15 0l-1.4 0.33-0.28-0.23 0.052-1.5a0.45 0.45 0 0 0-0.46-0.44 0.45 0.45 0 0 0-0.15 0.03l-1.3 0.61-0.33-0.17-0.24-1.4a0.45 0.45 0 0 0-0.53-0.34 0.46 0.46 0 0 0-0.14 0.058l-1.2 0.86-0.35-0.11-0.51-1.4a0.45 0.45 0 0 0-0.59-0.23 0.47 0.47 0 0 0-0.13 0.085l-1 1.1-0.36-0.035-0.77-1.3a0.45 0.45 0 0 0-0.73 0l-0.77 1.3-0.36 0.035-1-1.1a0.45 0.45 0 0 0-0.63 0.016 0.47 0.47 0 0 0-0.085 0.13l-0.52 1.4-0.35 0.11-1.2-0.85a0.45 0.45 0 0 0-0.62 0.14 0.46 0.46 0 0 0-0.058 0.14l-0.24 1.4-0.33 0.17-1.3-0.61a0.45 0.45 0 0 0-0.58 0.25 0.47 0.47 0 0 0-0.03 0.15l0.051 1.5-0.28 0.23-1.4-0.34a0.45 0.45 0 0 0-0.52 0.36 0.46 0.46 0 0 0 0 0.15l0.34 1.4-0.23 0.28-1.5-0.051a0.45 0.45 0 0 0-0.41 0.61l0.61 1.3-0.17 0.33-1.4 0.24a0.45 0.45 0 0 0-0.34 0.53 0.46 0.46 0 0 0 0.058 0.14l0.86 1.2-0.11 0.36-1.4 0.51a0.45 0.45 0 0 0-0.23 0.59 0.44 0.44 0 0 0 0.086 0.13l1.1 1-0.035 0.36-1.3 0.77a0.45 0.45 0 0 0 0 0.73l1.3 0.77 0.035 0.36-1.1 1a0.45 0.45 0 0 0 0.016 0.63 0.46 0.46 0 0 0 0.13 0.085l1.4 0.51 0.11 0.36-0.86 1.2a0.45 0.45 0 0 0 0.14 0.62 0.46 0.46 0 0 0 0.14 0.058l1.4 0.24 0.17 0.33-0.61 1.3a0.45 0.45 0 0 0 0.26 0.58 0.47 0.47 0 0 0 0.15 0.03l1.5-0.051 0.23 0.28-0.34 1.4a0.45 0.45 0 0 0 0.36 0.52 0.43 0.43 0 0 0 0.16 0l1.4-0.34 0.28 0.23-0.052 1.5a0.45 0.45 0 0 0 0.46 0.44 0.44 0.44 0 0 0 0.15-0.03l1.3-0.61 0.33 0.17 0.24 1.4a0.45 0.45 0 0 0 0.53 0.34 0.43 0.43 0 0 0 0.14-0.058l1.2-0.86 0.36 0.11 0.51 1.4a0.45 0.45 0 0 0 0.59 0.23 0.46 0.46 0 0 0 0.13-0.085l1-1.1 0.36 0.036 0.77 1.3a0.45 0.45 0 0 0 0.63 0.11 0.44 0.44 0 0 0 0.11-0.11l0.77-1.3 0.36-0.036 1 1.1a0.45 0.45 0 0 0 0.63-0.016 0.46 0.46 0 0 0 0.085-0.13l0.51-1.4 0.36-0.11 1.2 0.86a0.45 0.45 0 0 0 0.62-0.14 0.46 0.46 0 0 0 0.058-0.14l0.24-1.4 0.33-0.17 1.3 0.61a0.45 0.45 0 0 0 0.58-0.25 0.47 0.47 0 0 0 0.03-0.15l-0.051-1.5 0.28-0.23 1.4 0.34a0.45 0.45 0 0 0 0.52-0.36 0.48 0.48 0 0 0 0-0.16l-0.33-1.4 0.23-0.28 1.5 0.051a0.45 0.45 0 0 0 0.44-0.46 0.43 0.43 0 0 0-0.03-0.15l-0.61-1.3 0.17-0.33 1.4-0.24a0.45 0.45 0 0 0 0.34-0.53 0.46 0.46 0 0 0-0.06-0.14l-0.86-1.2 0.11-0.36 1.4-0.51a0.45 0.45 0 0 0 0.23-0.59 0.44 0.44 0 0 0-0.086-0.13l-1.1-1 0.035-0.36 1.3-0.77a0.45 0.45 0 0 0 0-0.73z"
+                        fill="url(#a)" stroke-width="1.1" />
+                </svg>
+                <span class="sr-only">Rust forum</span>
+            </a>
+            <a href="https://github.com/chesedo" target="_blank"
+               class="text-gray-600 hover:text-black focus:outline-none focus:ring-2 focus:ring-black">
+                <svg width="32px" height="32px" fill="currentColor" version="1.1" viewBox="0 0 32 32"
+                     xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="m16 1.4c-8.3 0-15 6.7-15 15 0 6.6 4.2 12 10 14l0.11 0.031c0.75 0.14 1-0.32 1-0.72 0-0.36-0.012-1.3-0.019-2.5-4.2 0.9-5.1-2-5.1-2-0.29-0.92-0.88-1.7-1.7-2.2l-0.016-9e-3c-1.4-0.93 0.1-0.91 0.1-0.91 0.99 0.14 1.8 0.72 2.3 1.5l8e-3 0.015c0.55 1 1.6 1.7 2.8 1.7 0.58 0 1.1-0.15 1.6-0.42l-0.016 8e-3c0.072-0.79 0.42-1.5 0.95-2l1e-3 -1e-3c-3.3-0.38-6.8-1.7-6.8-7.4 0-0.027-1e-3 -0.058-1e-3 -0.089 0-1.5 0.59-2.9 1.5-3.9l-3e-3 4e-3c-0.2-0.54-0.32-1.2-0.32-1.8 0-0.78 0.17-1.5 0.46-2.2l-0.014 0.034s1.3-0.4 4.1 1.5c1.1-0.32 2.4-0.51 3.7-0.51s2.6 0.18 3.8 0.53l-0.1-0.024c2.8-1.9 4.1-1.5 4.1-1.5 0.28 0.64 0.45 1.4 0.45 2.2 0 0.64-0.11 1.3-0.31 1.8l0.012-0.038c0.95 1 1.5 2.4 1.5 3.9 0 0.031 0 0.061-1e-3 0.091v-5e-3c0 5.8-3.5 7-6.8 7.4 0.63 0.65 1 1.5 1 2.5 0 0.093-4e-3 0.19-0.011 0.28l1e-3 -0.012c0 2-0.019 3.6-0.019 4.1 0 0.39 0.26 0.86 1 0.71 6-2 10-7.6 10-14 0-8.3-6.7-15-15-15h-0.019 1e-3z" />
+                </svg>
+                <span class="sr-only">GitHub</span>
+            </a>
+            <a href="https://softwarecrafters.slack.com/team/U0759FDNM2L" target="_blank"
+               class="grayscale hover:grayscale-0 focus:outline-none focus:ring-2 focus:ring-green-600">
+                <img
+                    src="{{ get_url(path = "images/software-craftsmanship.png") }}" alt="Software Craftsmanship Slack" class="w-8 h-8" width="32"
+                    height="32">
+            </a>
+        </div>
+    </div>
+</div>
 
-                return { globalVx, globalVy }
-            },
-        });
-    </script>
-</body>
+{% endblock content %}
 
-</html>
+{% block scripts %}
+<script src="{{ get_url(path = "sandy.js") }}"></script>
+<script>
+ new SandyImage("#profile", {
+     size: 5,
+     steps: 8,
+     dampingFactor: 0.2,
+     breezeFn: ({ frame, globalVx, globalVy }) => {
+         if (frame % 30 === 0) {
+             if (frame < 1000) {
+                 globalVx += Math.random() * -0.5;
+                 globalVy += Math.random() * 0.1;
+             } else {
+                 globalVx += Math.random() * 1 - 0.5;
+                 globalVy += Math.random() * 1 - 0.5;
+             }
+
+             globalVx = Math.tanh(globalVx);
+             globalVy = Math.tanh(globalVy);
+         }
+
+         return { globalVx, globalVy }
+     },
+ });
+</script>
+{% endblock scripts %}

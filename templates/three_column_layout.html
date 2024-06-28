@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<main class="container grow mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="md:col-span-2">
+            {% block main_content %}{% endblock main_content %}
+        </div>
+
+        {% include "partials/sidebar.html" %}
+    </div>
+</main>
+{% endblock content %}

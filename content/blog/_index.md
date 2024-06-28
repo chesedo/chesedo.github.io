@@ -1,6 +1,7 @@
 +++
 title = "Blog"
 sort_by = "date"
+description = "Explore articles on Rust programming, software craftsmanship, and tech insights from Pieter Engelbrecht, a Rust consultant and software craftsman."
 +++
 
 Welcome to my blog! Here you'll find my thoughts and experiences on Rust programming, software craftsmanship, and various tech topics. Feel free to explore the posts below.
