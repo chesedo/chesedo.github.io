@@ -4,6 +4,10 @@
     "build:css": "tailwindcss -i input.css -o static/css/styles.css",
     "build:zola": "zola build",
     "build": "npm run build:js && npm run build:css && npm run build:zola",
+    "check:content": "./scripts/check_content.sh",
+    "check": "npm run check:content",
+    "clean:content": "kondo --all content",
+    "clean": "npm run clean:content",
     "watch": "tailwindcss -i input.css -o static/css/styles.css --watch",
     "serve": "zola serve",
     "dev": "concurrently \"npm run watch\" \"npm run serve\""
