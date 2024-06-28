@@ -24,17 +24,19 @@
     {% block scripts %}{% endblock scripts %}
 
     <script>
-     document.querySelectorAll('a').forEach(function(anchor) {
-         if (anchor.href && !anchor.href.startsWith(window.location.origin)) {
-             anchor.addEventListener('click', function(e) {
-                 plausible('Outbound Link', {
-                     props: {
-                         url: this.href,
-                         text: this.innerText || 'Image Link'
-                     }
+     document.addEventListener('DOMContentLoaded', function() {
+         document.querySelectorAll('a').forEach(function(anchor) {
+             if (anchor.href && !anchor.href.startsWith(window.location.origin)) {
+                 anchor.addEventListener('click', function(e) {
+                     plausible('Outbound Link', {
+                         props: {
+                             url: this.href,
+                             text: this.innerText || 'Image Link'
+                         }
+                     });
                  });
-             });
-         }
+             }
+         });
      });
     </script>
 </body>

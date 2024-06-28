@@ -61,14 +61,44 @@
 
 {% block scripts %}
 <script>
- plausible('pageview', {
-     props: {
-         tags: '{{ page.taxonomies.tags | join(sep=",") }}',
-         title: '{{ page.title | escape }}',
-         readingTime: '{{ page.reading_time }}',
-         publicationDate: '{{ page.date | date(format="%Y-%m-%d") }}',
-         isUpdated: '{{ page.updated | default(value=false) }}'
+ document.addEventListener('DOMContentLoaded', function() {
+     // Extra custom events for page views
+     plausible('pageview', {
+         props: {
+             tags: '{{ page.taxonomies.tags | join(sep=",") }}',
+             title: '{{ page.title | escape }}',
+             readingTime: '{{ page.reading_time }}',
+             publicationDate: '{{ page.date | date(format="%Y-%m-%d") }}',
+             isUpdated: '{{ page.updated | default(value=false) }}'
+         }
+     });
+
+     // Track scroll depth
+     let scrollDepths = [25, 50, 75, 100];
+     let sentDepths = new Set();
+
+     function getScrollPercentage() {
+         const windowHeight = window.innerHeight;
+         const documentHeight = document.documentElement.scrollHeight - windowHeight;
+         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+         return Math.floor((scrollTop / documentHeight) * 100);
      }
+
+     function checkScrollDepth() {
+         const scrollPercentage = getScrollPercentage();
+         for (let depth of scrollDepths) {
+             if (scrollPercentage >= depth && !sentDepths.has(depth)) {
+                 plausible('Scroll Depth', { props: { depth: depth + '%' } });
+                 sentDepths.add(depth);
+             }
+         }
+     }
+
+     window.addEventListener('scroll', checkScrollDepth);
+     window.addEventListener('resize', checkScrollDepth);
+
+     // Check initial scroll depth (important for short pages)
+     checkScrollDepth();
  });
 
  document.querySelectorAll('pre[data-lang]').forEach((block) => {
