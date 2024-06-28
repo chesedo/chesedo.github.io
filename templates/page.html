@@ -54,5 +54,34 @@
     <a href="{{ get_url(path="@/blog/_index.md") }}" class="text-premium-gold-600 hover:text-premium-gold-800 transition duration-300">
         &larr; Back to Blog
     </a>
+
+    <script>
+     document.querySelectorAll('pre[data-lang]').forEach((block) => {
+         block.classList.add('relative');
+
+         const button = document.createElement('button');
+         button.className = 'absolute top-2 right-2 px-2 py-1 text-xs text-premium-gold-800 bg-premium-gold-100 border border-premium-gold-200 rounded hover:bg-premium-gold-200 transition duration-300';
+         button.textContent = 'Copy';
+         block.appendChild(button);
+
+         button.addEventListener('click', () => {
+             const code = block.querySelector('code');
+             const text = code.innerText;
+
+             navigator.clipboard.writeText(text).then(() => {
+                 button.textContent = 'Copied!';
+                 button.classList.remove('bg-premium-gold-100', 'hover:bg-premium-gold-200');
+                 button.classList.add('bg-premium-gold-200', 'text-premium-gold-900');
+                 setTimeout(() => {
+                     button.textContent = 'Copy';
+                     button.classList.remove('bg-premium-gold-200', 'text-premium-gold-900');
+                     button.classList.add('bg-premium-gold-100', 'hover:bg-premium-gold-200');
+                 }, 2000);
+             }).catch((err) => {
+                 console.error('Failed to copy text: ', err);
+             });
+         });
+     });
+    </script>
 </article>
 {% endblock content %}

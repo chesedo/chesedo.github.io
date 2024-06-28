@@ -1,0 +1,27 @@
+{#
+  Rust code snippet shortcode
+
+  Usage:
+    {{ rust_snippet(file="example.rs") }}             - Display entire file
+    {{ rust_snippet(file="example.rs", start=3) }}    - Display from line 3 to end
+    {{ rust_snippet(file="example.rs", end=10) }}     - Display from start to line 10
+    {{ rust_snippet(file="example.rs", start=3, end=10) }} - Display lines 3 to 10
+
+  The 'file' parameter is relative to the content file's location.
+#}
+
+{% set snippet = load_data(path = "content/" ~ page.colocated_path ~ file) | trim %}
+{% set lines = snippet | split(pat="\n") %}
+
+{% set start = start | default(value=1) | int %}
+{% set end = end | default(value=lines | length) | int %}
+
+{% set selected_lines = lines | slice(start=start - 1, end=end) %}
+{# Physical newline required for proper rendering: https://github.com/Keats/tera/issues/625 #}
+{% set final_snippet = selected_lines | join(sep="
+") %}
+
+{# Physical newline required for proper rendering: https://github.com/Keats/tera/issues/625 #}
+{{ "```rust
+" ~ final_snippet ~ "
+```" | markdown | safe }}
