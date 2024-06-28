@@ -5,6 +5,7 @@ with pkgs;
 mkShell {
   buildInputs = [
     cargo
+    chromium
     clippy
     kondo
     nodejs

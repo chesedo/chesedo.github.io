@@ -17,5 +17,8 @@
     "concurrently": "^8.2.2",
     "sandy-image": "^1.0.3",
     "tailwindcss": "^3.4.3"
+  },
+  "dependencies": {
+    "@lhci/cli": "^0.14.0"
   }
 }
