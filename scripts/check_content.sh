@@ -22,13 +22,13 @@ check_directory() {
 }
 
 # Find all directories containing a Cargo.toml file and check them
-while IFS= read -r -d '' cargo_file
+find "$CONTENT_DIR" -name "Cargo.toml" | while IFS= read -r cargo_file
 do
     dir=$(dirname "$cargo_file")
     if ! check_directory "$dir"; then
         all_passed=false
     fi
-done < <(find "$CONTENT_DIR" -name "Cargo.toml" -print0)
+done
 
 echo ""
 
