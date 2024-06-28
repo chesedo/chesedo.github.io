@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block content %}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="md:col-span-2">
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">{{ section.title }}</h1>
+        <div class="prose max-w-none mb-8">
+            {{ section.content | safe }}
+        </div>
+
+        {{ macros::list(pages = section.pages) }}
+    </div>
+
+    {% include "partials/sidebar.html" %}
+</div>
+{% endblock content %}

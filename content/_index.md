@@ -5,7 +5,7 @@ description = "Pieter Engelbrecht, aka chesedo, is a Rust Programming Language C
 
 # Pieter Engelbrecht
 ## Aka. chesedo
-### Rust Programming Language Consultant / Freelancer
+### Rust Consultant & Software Craftsman
 With 3+ years of exclusive Rust experience, including an undergrad thesis on procedural macros, I offer
 specialized services for:
 - Architecting Rust projects

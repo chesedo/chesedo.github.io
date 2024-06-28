@@ -1,16 +1,25 @@
 # The URL the site will be built for
 base_url = "https://chesedo.me"
 
+title = "chesedo"
+description = "I'm Pieter Engelbrecht, aka chesedo, a Rust Programming Language Consultant and Freelancer with 3+ years of exclusive Rust experience."
+
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = false
 
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = true
 
+taxonomies = [
+    {name = "tags"}
+]
+
 [markdown]
-# Whether to do syntax highlighting
-# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
 highlight_code = true
+highlight_theme = "cheerfully-light"
 
 [extra]
-# Put all your custom variables here
+author_name = "Pieter Engelbrecht"
+author_title = "Rust Consultant & Software Craftsman"
+author_bio = "A Rust Programming Language Consultant with over 3 years of exclusive Rust experience. I specialize in architecting Rust projects and helping teams adopt Rust effectively."
+author_image = "images/profile.jpg"

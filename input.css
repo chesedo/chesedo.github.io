@@ -1,22 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Raleway:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400&family=Playfair+Display:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Apply Raleway to the body */
+/* Apply sans to the body */
 body {
-    @apply font-raleway bg-gray-50 text-gray-800;
+    @apply font-sans bg-gray-50 text-gray-800;
 }
 
-/* Apply Lato to all headings */
+/* Apply serif to all headings */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-    @apply font-lato;
+    @apply font-serif;
 }
 
 .grayscale-img {

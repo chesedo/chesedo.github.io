@@ -12,13 +12,17 @@
 </head>
 
 <body class="flex flex-col items-center justify-between min-h-screen">
+    <a href="{{ get_url(path="@/blog/_index.md") }}"
+    class="w-full bg-yellow-50 border-y border-yellow-500 hover:border-yellow-600 py-2 text-center text-yellow-700 hover:text-yellow-900 transition duration-300 text-lg font-semibold">
+        Explore my blog posts &rarr;
+    </a>
 
     <!-- Main container -->
     <div class="container p-6 flex-1 flex flex-col md:flex-row md:items-center md:justify-between" id="home">
 
         <!-- Profile Photo -->
         <div class="mb-6 md:mb-0 max-h-full">
-            <img id="profile" src="{{ get_url(path = "images/formal.jpg") }}" alt="Pieter Engelbrecht's Photo"
+            <img id="profile" src="{{ get_url(path = "images/formal.jpg") }}" alt="{{ config.extra.author_name }}'s Photo"
                 class="object-cover max-h-full md:max-h-screen mx-auto" width="366" height="700">
         </div>
 
@@ -80,12 +84,9 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="w-full py-4 text-center border-t border-gray-300">
-        <p class="text-sm">© 2024 Pieter Engelbrecht. All rights reserved.</p>
-    </footer>
+    {% include "partials/footer.html" %}
 
-    <script src="sandy.js"></script>
+    <script src="{{ get_url(path = "sandy.js") }}"></script>
     <script>
         new SandyImage("#profile", {
             size: 5,

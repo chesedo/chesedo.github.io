@@ -1,0 +1,13 @@
+<header class="w-full bg-gray-100 py-6 shadow">
+    <div class="container mx-auto px-4">
+        <nav class="flex justify-between items-center">
+            <a href="{{ get_url(path="@/_index.md") }}" class="text-2xl font-bold text-yellow-700 hover:text-yellow-600 transition duration-300">
+                {{ config.title }}
+            </a>
+            <div class="space-x-6">
+                <a href="{{ get_url(path="@/_index.md") }}" class="text-lg text-gray-800 hover:text-yellow-600 transition duration-300 {% if current_path == "/" %}font-semibold{% endif %}">Home</a>
+                <a href="{{ get_url(path="@/blog/_index.md") }}" class="text-lg text-gray-800 hover:text-yellow-600 transition duration-300 {% if current_path is starting_with("/blog") %}font-semibold{% endif %}">Blog</a>
+            </div>
+        </nav>
+    </div>
+</header>
