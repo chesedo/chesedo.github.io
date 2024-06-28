@@ -1,22 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <div class="md:col-span-2">
-        <h1 class="text-4xl font-bold mb-6 text-gray-800">All Tags</h1>
+<main class="container grow mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="md:col-span-2">
+            <h1 class="text-4xl font-bold mb-6 text-gray-800">All Tags</h1>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {% for term in terms %}
-            <a href="{{ term.permalink }}" class="block p-4 bg-white shadow-md rounded-lg border border-premium-gold-200 hover:shadow-lg transition duration-300">
-                <h2 class="text-xl font-bold text-gray-800 hover:text-premium-gold-600 transition duration-300">
-                    {{ term.name }}
-                </h2>
-                <p class="text-gray-600 mt-2">{{ term.pages | length }} post{% if term.pages | length != 1 %}s{% endif %}</p>
-            </a>
-            {% endfor %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {% for term in terms %}
+                <a href="{{ term.permalink }}" class="block p-4 bg-white shadow-md rounded-lg border border-premium-gold-200 hover:shadow-lg transition duration-300">
+                    <h2 class="text-xl font-bold text-gray-800 hover:text-premium-gold-600 transition duration-300">
+                        {{ term.name }}
+                    </h2>
+                    <p class="text-gray-600 mt-2">{{ term.pages | length }} post{% if term.pages | length != 1 %}s{% endif %}</p>
+                </a>
+                {% endfor %}
+            </div>
         </div>
-    </div>
 
-    {% include "partials/sidebar.html" %}
-</div>
+        {% include "partials/sidebar.html" %}
+    </div>
+</main>
 {% endblock content %}

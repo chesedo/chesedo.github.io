@@ -3,28 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    {% if page.title %}
-    <title>{{ page.title }} - {{ config.title }}</title>
-    {% elif section.title %}
-    <title>{{ section.title }} - {{ config.title }}</title>
-    {% endif %}
-
-    {% if page.description %}
-        <meta name="description" content="{{ page.description }}">
-    {% elif section.description %}
-        <meta name="description" content="{{ section.description }}">
-    {% endif %}
-
+    <meta name="description" content="{% block description %}{{ config.description }}{% endblock description %}">
+    <meta name="generator" content="Zola">
+    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
     <link rel="stylesheet" href="{{ get_url(path="css/styles.css") | safe }}">
+    <script defer data-domain="chesedo.me" src="https://plausible.io/js/script.tagged-events.js"></script>
+    {% block head %}{% endblock head %}
 </head>
 <body class="flex flex-col min-h-screen">
-    {% include "partials/header.html" %}
+    {% block header %}
+        {% include "partials/header.html" %}
+    {% endblock header %}
 
-    <main class="container grow mx-auto px-4 py-8">
-        {% block content %}{% endblock content %}
-    </main>
+    {% block content %}{% endblock content %}
 
-    {% include "partials/footer.html" %}
+    {% block footer %}
+        {% include "partials/footer.html" %}
+    {% endblock footer %}
+
+    {% block scripts %}{% endblock scripts %}
 </body>
 </html>
