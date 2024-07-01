@@ -21,7 +21,7 @@ module.exports = {
           },
         },
         {
-          matchingUrlPattern: "http:[^/]+/blog/.*/",
+          matchingUrlPattern: "^http://[^/]+/blog/.*/",
           preset: 'lighthouse:no-pwa',
           assertions: {
             'categories:performance': ['error', {minScore: 0.9}],
