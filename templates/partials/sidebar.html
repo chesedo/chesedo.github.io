@@ -4,8 +4,8 @@
             <h2 class="text-xl font-bold text-gray-800">About the Author</h2>
         </div>
         <div class="p-6">
-            <img src="{{ get_url(path = config.extra.author_image) }}" alt="{{ config.extra.author_name }}" id="profile" class="w-32 h-32 rounded-full mx-auto mb-4 border-2 border-yellow-600">
-            <a href="{{ get_url(path = "@/_index.md") }}"><h3 class="text-lg font-semibold text-center text-yellow-700">{{ config.extra.author_name }}</h3></a>
+            <img src="{{ get_url(path = config.extra.author_image) }}" alt="{{ config.extra.author_name }}" id="profile" class="w-32 h-32 rounded-full mx-auto mb-4 border-2 border-premium-gold-400">
+            <a href="{{ get_url(path = "@/_index.md") }}"><h3 class="text-lg font-semibold text-center text-premium-gold-800">{{ config.extra.author_name }}</h3></a>
             <h4 class="text-gray-600 text-center mb-4">{{ config.extra.author_title }}</h4>
             <p class="text-gray-700">{{ config.extra.author_bio }}</p>
         </div>
@@ -19,7 +19,7 @@
             <div class="flex flex-wrap gap-2">
                 {% set tags = get_taxonomy(kind="tags") %}
                 {% for tag in tags.items %}
-                <a href="{{ tag.permalink }}" class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm hover:bg-yellow-200 transition duration-300">
+                <a href="{{ tag.permalink }}" class="px-3 py-1 bg-premium-gold-100 text-premium-gold-800 rounded-full text-sm hover:bg-premium-gold-200 transition duration-300">
                     {{ tag.name }}
                 </a>
                 {% endfor %}
