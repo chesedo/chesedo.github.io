@@ -1,10 +1,11 @@
 {
   "scripts": {
     "build:js": "cp node_modules/sandy-image/sandy* ./static/",
-    "build:css": "tailwindcss -i input.css -o static/css/styles.css",
+    "build:css": "tailwindcss -i input.css -o static/css/styles.css --minify",
     "build:zola": "zola build",
     "build": "npm run build:js && npm run build:css && npm run build:zola",
     "check:content": "./scripts/check_content.sh",
+    "check:lh": "lhci autorun",
     "check": "npm run check:content",
     "clean:content": "kondo --all content",
     "clean": "npm run clean:content",

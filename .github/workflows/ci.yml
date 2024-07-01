@@ -48,4 +48,4 @@ jobs:
       - name: Build the project
         run: npm run build
       - name: Run Lighthouse CI
-        run: lhci autorun
+        run: npm run check:lh
