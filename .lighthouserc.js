@@ -9,10 +9,10 @@ module.exports = {
           matchingUrlPattern: "^(?!http://[^/]+/blog/.*/)",
           preset: 'lighthouse:no-pwa',
           assertions: {
-            'categories:performance': ['error', {minScore: 0.9}],
-            'categories:accessibility': ['error', {minScore: 0.9}],
-            'categories:best-practices': ['error', {minScore: 0.9}],
-            'categories:seo': ['error', {minScore: 0.9}],
+            'categories:performance': ['error', {minScore: 0.95}],
+            'categories:accessibility': ['error', {minScore: 0.95}],
+            'categories:best-practices': ['error', {minScore: 0.95}],
+            'categories:seo': ['error', {minScore: 0.95}],
 
             // Ignore checks which have no benefit for me right now
             'first-contentful-paint': ['error', {minScore: 0.8}],
@@ -24,10 +24,10 @@ module.exports = {
           matchingUrlPattern: "^http://[^/]+/blog/.*/",
           preset: 'lighthouse:no-pwa',
           assertions: {
-            'categories:performance': ['error', {minScore: 0.9}],
-            'categories:accessibility': ['error', {minScore: 0.9}],
-            'categories:best-practices': ['error', {minScore: 0.9}],
-            'categories:seo': ['error', {minScore: 0.9}],
+            'categories:performance': ['error', {minScore: 0.95}],
+            'categories:accessibility': ['error', {minScore: 0.95}],
+            'categories:best-practices': ['error', {minScore: 0.95}],
+            'categories:seo': ['error', {minScore: 0.95}],
 
             // Ignore checks which have no benefit for me right now
             'first-contentful-paint': ['error', {minScore: 0.8}],
