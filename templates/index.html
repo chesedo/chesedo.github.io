@@ -3,6 +3,39 @@
 {% block title %}{{ section.title }} - Rust Consultant{% endblock title %}
 {% block description %}{{ section.description }}{% endblock description %}
 
+{% block head %}
+<style>
+#home h1 {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 600;
+}
+
+#home h2 {
+  margin-bottom: 1rem;
+  --tw-text-opacity: 1;
+  color: rgb(161 98 7 / var(--tw-text-opacity));
+}
+
+#home h3 {
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+#home p {
+  margin-bottom: 1.5rem;
+}
+
+#home ul {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
+  list-style-type: disc;
+}
+</style>
+{% endblock head %}
+
 {% block header %}
 <a href="{{ get_url(path="@/blog/_index.md") }}"
    class="w-full bg-yellow-50 border-y border-yellow-500 hover:border-yellow-600 py-2 text-center text-yellow-700 hover:text-yellow-900 transition duration-300 text-lg font-semibold">
