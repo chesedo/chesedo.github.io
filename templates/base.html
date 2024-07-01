@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400&family=Playfair+Display:wght@400;700&display=swap&text=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,!%26%23%3B%2F%7C%20" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ get_url(path="css/styles.css") | safe }}">
-    <script defer data-domain="chesedo.me" src="https://plausible.io/js/script.tagged-events.manual.js"></script>
+    <script defer data-domain="chesedo.me" src="https://plausible.io/js/script.pageview-props.outbound-links.js"></script>
     {% block head %}{% endblock head %}
 </head>
 <body class="flex flex-col min-h-screen">
@@ -27,22 +27,5 @@
     {% endblock footer %}
 
     {% block scripts %}{% endblock scripts %}
-
-    <script>
-     document.addEventListener('DOMContentLoaded', function() {
-         document.querySelectorAll('a').forEach(function(anchor) {
-             if (anchor.href && !anchor.href.startsWith(window.location.origin)) {
-                 anchor.addEventListener('click', function(e) {
-                     plausible('Outbound Link', {
-                         props: {
-                             url: this.href,
-                             text: this.innerText || 'Image Link'
-                         }
-                     });
-                 });
-             }
-         });
-     });
-    </script>
 </body>
 </html>
