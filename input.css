@@ -16,3 +16,11 @@ h5,
 h6 {
     @apply font-serif;
 }
+
+.mermaid-diagram {
+  @apply my-8 mx-auto max-w-full overflow-x-auto;
+}
+
+.mermaid-diagram .label {
+    font-size: 16px; /* Fixes text overflowing their boxes */
+}
