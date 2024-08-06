@@ -110,8 +110,9 @@
      block.classList.add('relative');
 
      const button = document.createElement('button');
-     button.className = 'absolute top-2 right-2 px-2 py-1 text-xs text-premium-gold-800 bg-premium-gold-100 border border-premium-gold-200 rounded hover:bg-premium-gold-200 transition duration-300';
+     button.className = 'px-2 py-1 text-xs text-premium-gold-800 bg-premium-gold-100 border border-premium-gold-200 rounded hover:bg-premium-gold-200 transition duration-300';
      button.textContent = 'Copy';
+     button.style.position = 'fixed';
      block.appendChild(button);
 
      button.addEventListener('click', () => {
@@ -131,6 +132,16 @@
              console.error('Failed to copy text: ', err);
          });
      });
+
+     function updateButtonPosition() {
+         const rect = block.getBoundingClientRect();
+         button.style.top = `${rect.top + 6}px`;
+         button.style.right = `${window.innerWidth - rect.right + 6}px`;
+     }
+
+     window.addEventListener('resize', updateButtonPosition);
+     window.addEventListener('scroll', updateButtonPosition);
+     updateButtonPosition();
  });
 </script>
 {% endblock scripts %}
