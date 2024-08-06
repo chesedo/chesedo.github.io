@@ -21,6 +21,17 @@ h6 {
   @apply my-8 mx-auto max-w-full overflow-x-auto;
 }
 
+.mermaid-diagram foreignObject {
+  display: inline-block;
+  overflow: visible;
+}
+
+.mermaid-diagram span {
+  display: inline-block;
+  white-space: pre;
+}
+
 .mermaid-diagram .label {
-    font-size: 16px; /* Fixes text overflowing their boxes */
+  font-size: 16px; /* Fixes text overflowing their boxes */
+  line-height: initial;
 }
