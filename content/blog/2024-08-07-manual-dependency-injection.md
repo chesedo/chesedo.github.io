@@ -11,7 +11,7 @@ However, implementing DI in Rust presents unique challenges due to the language'
 
 My journey with DI in Rust began with Luca Palmieri's Pavex framework in late 2022.
 Initially, I struggled to grasp its implementation.
-It wasn't until RustNation in March 2024 where Luca's showed an update of Pavex that I fully understood how DI could work in Rust.
+It wasn't until RustNation in March 2024 where [Luca's showed an update of Pavex](https://www.youtube.com/watch?v=cMea6IMRk2s) that I fully understood how DI could work in Rust.
 Inspired by this insight, I set out to possibly create a DI solution using Rust's macro system, avoiding the extra compile step required by Pavex.
 
 This article, the first in a series, documents my investigation into DI in Rust using a dependency container.
@@ -239,7 +239,7 @@ Imagine our `DataCollector` turned out to be something which collects data from 
 Further imagine our service is a background task which checks for alerts every minute.
 We might therefore request a `MonitoringSystem` on every 1 minute loop.
 This means building the entire dependency tree for `MonitoringSystem` every minute.
-Since the DB connection is one of these dependencies, we will be making a new connection for it every minute too.
+Since the DB connection is one of these dependencies, we will be establishing a new connection for it every minute too.
 And this is unneeded overhead.
 It would be better to make the DB connect once when the program starts, or the first time when the object is requested, and then reuse the object each time the dependency is needed again.
 
@@ -260,7 +260,7 @@ These are typically lightweight objects like DTOs, formatters, or ID generators.
 In the following sections, we'll implement our dependency container step by step, addressing each of these requirements and demonstrating how to manage different dependency lifetimes effectively.
 
 ## From Theory to Practice: Crafting a Rust Dependency Container
-Let's get back to the list of requirements for the dependency container.
+Let's continue with the list of requirements for the dependency container.
 We will now address each item in the list starting with returning concrete types.
 
 ### Implementing Concrete Type Returns
