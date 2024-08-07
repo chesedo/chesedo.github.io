@@ -1,0 +1,33 @@
+name: Setup Kroki
+
+on:
+  workflow_call:
+
+jobs:
+  setup-kroki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cache Docker images
+        uses: actions/cache@v3
+        with:
+          path: /tmp/docker-images
+          key: ${{ runner.os }}-docker-${{ hashFiles('**/podman-compose.yml') }}
+
+      - name: Load cached Docker images
+        run: |
+          if [ -d "/tmp/docker-images" ]; then
+            docker load < /tmp/docker-images/kroki.tar
+            docker load < /tmp/docker-images/kroki-mermaid.tar
+          fi
+
+      - name: Start and wait for Kroki services
+        run: docker compose --file podman-compose.yml up --wait
+
+      - name: Save Docker images
+        if: always()
+        run: |
+          mkdir -p /tmp/docker-images
+          docker save yuzutech/kroki > /tmp/docker-images/kroki.tar
+          docker save yuzutech/kroki-mermaid > /tmp/docker-images/kroki-mermaid.tar
