@@ -30,7 +30,7 @@
   }
 }%%
 " ~ body %}
-{% set postdata = load_data(url="https://kroki.io/mermaid/svg", format="plain", method="POST", content_type="text/plain", body=body) %}
+{% set postdata = load_data(url="http://localhost:8000/mermaid/svg", format="plain", method="POST", content_type="text/plain", body=body) %}
 
 {% set adjusted_svg = postdata | replace(from='<svg ', to='<svg preserveAspectRatio="xMinYMin meet" ') %}
 

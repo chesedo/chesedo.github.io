@@ -8,10 +8,12 @@
     "check:lh": "lhci autorun",
     "check": "npm run check:content",
     "clean:content": "kondo --all content",
-    "clean": "npm run clean:content",
+    "clean:compose": "podman-compose down",
+    "clean": "npm run clean:content && npm run clean:compose",
     "watch": "tailwindcss -i input.css -o static/css/styles.css --watch",
     "serve": "zola serve",
-    "dev": "concurrently \"npm run watch\" \"npm run serve\""
+    "dev": "concurrently \"npm run dev:kroki\" \"npm run watch\" \"npm run serve\"",
+    "dev:kroki": "podman-compose up -d"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.13",
