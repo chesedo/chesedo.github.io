@@ -1,0 +1,18 @@
+version: '3'
+services:
+  kroki:
+    image: docker.io/yuzutech/kroki
+    ports:
+      - "8000:8000"
+    environment:
+      - KROKI_MERMAID_HOST=kroki-mermaid
+    depends_on:
+      - kroki-mermaid
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  kroki-mermaid:
+    image: docker.io/yuzutech/kroki-mermaid
