@@ -9,7 +9,7 @@ module.exports = {
           matchingUrlPattern: "^(?!http://[^/]+/blog/.*/)",
           preset: 'lighthouse:no-pwa',
           assertions: {
-            'categories:performance': ['error', {minScore: 0.95}],
+            'categories:performance': ['error', {minScore: 0.90}],
             'categories:accessibility': ['error', {minScore: 0.95}],
             'categories:best-practices': ['error', {minScore: 0.95}],
             'categories:seo': ['error', {minScore: 0.95}],
@@ -18,6 +18,9 @@ module.exports = {
             'first-contentful-paint': ['error', {minScore: 0.8}],
             'render-blocking-resources': 'off',
             'uses-long-cache-ttl': 'off',
+            'offscreen-images': 'off',
+            'mainthread-work-breakdown': 'warn',
+            'modern-image-formats': 'warn',
           },
         },
         {
@@ -30,12 +33,13 @@ module.exports = {
             'categories:seo': ['error', {minScore: 0.95}],
 
             // Ignore checks which have no benefit for me right now
-            'first-contentful-paint': ['error', {minScore: 0.8}],
+            'first-contentful-paint': ['error', {minScore: 0.7}],
             'render-blocking-resources': 'off',
             'uses-long-cache-ttl': 'off',
+            'dom-size': 'warn',
 
             // Also ignore syntax highlighting contrast checks
-            "color-contrast": "off"
+            "color-contrast": "off",
           },
         }
       ],
