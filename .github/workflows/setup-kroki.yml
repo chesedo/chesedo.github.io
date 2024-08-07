@@ -22,8 +22,8 @@ jobs:
             docker load < /tmp/docker-images/kroki-mermaid.tar
           fi
 
-      - name: Start and wait for Kroki services
-        run: docker compose --file podman-compose.yml up --wait
+      - name: Pull the kroki images
+        run: docker compose --file podman-compose.yml pull
 
       - name: Save Docker images
         if: always()
