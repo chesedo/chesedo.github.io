@@ -14,5 +14,3 @@ My aim is to regularly share my insights on:
 - My experiences as a Rust consultant and freelancer
 
 Whether you're a seasoned Rust developer or just getting started, I hope you'll find something interesting and useful here. Enjoy reading!
-
-... Well, I finished the code snippets for my first post. But am still writing it...

@@ -3,6 +3,7 @@ title = "Mastering Dependency Injection in Rust: Crafting a Custom Container"
 description = "Learn how to implement a custom Dependency Injection (DI) container in Rust. This comprehensive guide covers various dependency types, lifetimes, and advanced patterns, providing a solid foundation for building modular and testable Rust applications."
 [taxonomies]
 tags = ["Rust", "Dependency Injection", "Software Design", "Advanced Rust", "Software Architecture"]
+categories = ["Rust Dependency Injection"]
 +++
 
 In modern software development, managing dependencies efficiently is essential for creating scalable and maintainable applications.
@@ -38,7 +39,7 @@ Instead of creating dependencies directly, a component receives its dependencies
 Consider a simple example of a monitoring system that sends alerts.
 Without DI, the monitoring system might directly create instances of the email service and data collector:
 
-#### Traditional Approach: Code Without Dependency Injection
+#### Easy Approach: Code Without Dependency Injection
 
 {% mermaid() %}
 ---
@@ -125,11 +126,11 @@ In this scenario:
 Testing is simplified because you can inject mock implementations, avoiding the need for real credentials and external dependencies.
 - **Maintenance**: Maintenance is easier as you can switch implementations of `MessageService` or `DataCollector` without altering the `MonitoringSystem`.
 - **Separation of Concerns**: The `MonitoringSystem` now focuses on business logic, driven by stakeholder requirements, while low-level details such as email credentials and API keys are managed by the respective services.
-This separation aligns with Clean Architecture principles, where all dependency arrows point towards the business logic, making it stable and adaptable to changes in lower-level details.
+This separation aligns with [Clean Architecture](https://www.amazon.com/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164) principles, where all dependency arrows point towards the business logic, making it stable and adaptable to changes in lower-level details.
 
-But I don't want to spend time stating the benefits of such design in this article.
+But I don't want to spend time stating the benefits of such a design in this article.
 There is already a great article on [Hexagonal Architecture Design in Rust](https://www.howtocodeit.com/articles/master-hexagonal-architecture-rust).
-However, that article ends with a `setup` module which can be improved by a more automated dependency resolution for bigger applications.
+However, that article ends with a `setup` module which can be improved by a more automated dependency resolution for bigger applications - it is, however, absoulutely fine for smaller, simpler applications.
 
 ## How Other Languages Handle Dependency Injection
 My first exposure to DI was in C# around the time that services became a first class citizen in the language.
@@ -151,9 +152,9 @@ monitoringSystem.CheckForAlerts();
 ```
 
 Here the `ServiceCollection` from C# will find all the constructors for `MonitoringSystem` at runtime.
-It would then find that the single constructor as per our design needs something which implements a `MessageServive` and a `DataCollector` to be able to call the constructor.
+It would then find that the single constructor as per our design needs something which implements a `MessageService` and a `DataCollector` to be able to call the constructor.
 And this is why we also register another two dependencies on the collection which does implement these.
-One for the `MessageService` and another for the `DataCollection`.
+One for the `MessageService` and another for the `DataCollector`.
 
 In Java this is even easier because of `@Autowired`.
 
@@ -168,7 +169,7 @@ In this example we only have to make the request to the final `MonitoringSystem`
 But the constructors of each class does have `@Autowire` annotation to, well, auto wire them correctly later to `@Component`s.
 
 ### Under the Hood of C# and Java
-The reason C# and Java are able to automatically deduce that it needs to use a `MessageService` and a `DataCollection` to be able to construct a `MonitoringSystem` is because of reflection at runtime.
+The reason C# and Java are able to automatically deduce that it needs to use a `MessageService` and a `DataCollector` to be able to construct a `MonitoringSystem` is because of reflection at runtime.
 This means that at runtime it is possible to inspect the `MonitoringSystem` class to know which constructors it has and what the arguments are for the constructors.
 It is then able, at runtime, to find and instantiate any other dependencies that satisfy these constructor arguments.
 
@@ -185,24 +186,19 @@ Code running at runtime needs to be in the runtime binary.
 Including any reflection and meta code.
 1. **Moves errors from compile time to runtime**.
 Since reflection happens at runtime, if there is an error there, then you only know about it at runtime.
-Eg these are the errors generated by C# and Java at runtime if the `DataCollector` dependency is missing.
+Ie if the `DataCollector` dependency is missing in these C# and Java code examples, then you will only get an error once the program is started.
+This will be long after all the linting and compile checks happened.
+And will be when the service is already in production.
 In the Rust ecosystem we love to rather have these errors at compile time.
 1. **Is less explicit**.
 Take the Java approach as an example, one will have to search through the entire codebase to understand what uses which dependencies.
 This makes maintenance of that code slower.
+Basically, too much "magic" makes the code hard to understand.
 The same does not apply for C# since all the dependencies are explicitely setup at the same location.
 1. **Can use interfaces / traits instead**.
 Any code that typically relies on reflection can be redesigned using an interface-first mindset.
 
 ## Leveraging Rust's Features for Dependency Injection
-But we do have a powerful macro system which few other languages has.
-For this article we will not be considering how macros will help us.
-
-In Rust we also enjoy having errors at compile time rather than at runtime.
-For example, if we forget to register an `EmailService` in C#, Java, etc. then those code pieces will compile fine.
-It is only at runtime that those applications will crash because of the missing dependency.
-
-### Dependency Containers
 Like `ServiceProvider` from C# and `ApplicationContext` from Java we need an object that knows how to construct each of the dependencies we possibly want.
 This is each dependency on the chain of dependencies to make something like the `MonitoringSystem`.
 
@@ -212,8 +208,8 @@ Since we don't have access to reflection, nor are we aiming to use macros, we ar
 The benefits of writing it manually are:
 - We get to better understand what some of these frameworks are doing behind the scenes.
 We are unveiling the magic so to speak.
-- We get to establish patterns on how to handle certain cases by seeing a repeat of things happening for a group of things.
-This is important as it set the ground work for turning the repeated things into a macro.
+- We get to establish patterns on how to handle certain cases by seeing a repeat of things happening for a common group of cases.
+This is important as it sets the ground work for turning the repeated things into a macro.
 - We promote all errors in missing dependencies to compile time errors.
 
 ### Requirements for a Rust Dependency Container
@@ -227,7 +223,7 @@ These are designed to leverage Rust's strengths while addressing the unique chal
 #### Flexibility and Usability
 - Support for returning concrete types, trait objects, and dynamic trait objects.
 Overall, we want to keep a clean DX by avoiding the use of generics.
-Generics will just make the codebase harder to read and to pass objects around.
+Generics will just make the codebase harder to read and to pass our container around.
 - Ability to handle deeply nested dependencies without complicating the API for developers.
 - Support for conditional dependencies based on runtime configuration.
 
@@ -272,6 +268,9 @@ But sometimes we might have a concrete type like config settings, a random id ge
 ```rust
 use chrono::{DateTime, Utc};
 
+// The container we are going to use to resolve dependencies.
+// Like `ServiceCollection` in .NET Core
+// And `ApplicationContext` in Spring
 pub struct DependencyContainer;
 
 impl DependencyContainer {
@@ -279,6 +278,7 @@ impl DependencyContainer {
         Self
     }
 
+    // We just make a function to return the concrete type
     pub fn datetime(&self) -> DateTime<Utc> {
         Utc::now()
     }
@@ -290,12 +290,17 @@ Returning something that implements a trait is also simple by using the `impl` o
 
 ```rust
 impl DependencyContainer {
+    // This time we are returning an abstract type
+    // This allows us to change the implementation of this function to change
+    // the low-level details without changing the business code
     pub fn data_collector_impl(&self) -> impl DataCollector {
         SimpleDataCollector::new("api_key".to_string())
     }
 }
 
+// -------------------------------------
 // data_collector.rs
+// -------------------------------------
 pub trait DataCollector {
     fn collect_data(&self) -> Vec<String>;
 }
@@ -323,7 +328,7 @@ So we have them behind traits.
 We can now easily swap out this `SimpleDataCollector`, which fetches data using an API call, with any other type of data collector.
 This other data collector might be a database call or some socket reader instead.
 It does not matter since that's something a developer will know how to implement and it does not change the business logic at all in terms of which data points will become alerts.
-But by using the `impl` with a trait we can easily swap this out for another data collector when that is needed simply by changing this line.
+But by using the `impl` with a trait we can easily swap this out for another data collector when that is needed simply by changing this single method.
 
 By using `impl` we also don't introduce any generics on our `DependencyContainer` or the method.
 This keeps it easy to pass the `DependencyContainer` around to functions it might need to go.
@@ -336,6 +341,7 @@ Hence, we might try the following.
 
 ```rust
 impl DependencyContainer {
+    // Attempt to conditional choose the [DataCollector] at runtime
     fn create_data_collector_impl_error(&self) -> impl DataCollector {
         if false {
             SimpleDataCollector::new("api_key".to_string())
@@ -345,7 +351,9 @@ impl DependencyContainer {
     }
 }
 
+// -------------------------------------
 // data_collector.rs
+// -------------------------------------
 pub struct SqlDataCollector {
     connection_string: String,
 }
@@ -364,9 +372,9 @@ impl DataCollector for SqlDataCollector {
 ```
 
 This will give a `'if' and 'else' have incompatible types` compile error.
-This is because the `impl` return type is a syntax sugar for a generic return type.
+This is because the `impl` return type is a syntax sugar for a generic return type... well almost atleast.
 So the block in the previous section replaces the `impl DataCollector` return type with `SimpleDataCollector` instead.
-But this section has both `SimpleDataCollector` and `SqlDataCollector` for return types so the compiler does not know what to replace the `impl DataCollector` return type with.
+But this new section has both `SimpleDataCollector` and `SqlDataCollector` for return types so the compiler does not know what to replace the `impl DataCollector` return type with.
 The solution is to rather return `dyn DataCollector`.
 
 ```rust
@@ -388,6 +396,7 @@ Thus the following allows us to return dyn traits which allows choosing the conc
 
 ```rust
 impl DependencyContainer {
+    // We can now conditionally choose which [DataCollector] to use at runtime
     fn create_data_collector_dyn(&self) -> Box<dyn DataCollector> {
         if false {
             Box::new(SimpleDataCollector::new("api_key".to_string()))
@@ -403,6 +412,8 @@ Infact, we can already the see the error by adding the following method which ag
 
 ```rust
 impl DependencyContainer {
+    // Things calling this method does not care that it might be a boxed type
+    // They just want a [DataCollector]
     pub fn data_collector_dyn(&self) -> impl DataCollector {
         self.create_data_collector_dyn()
     }
@@ -413,7 +424,9 @@ We see from the error message that the box does not implement our trait.
 Since we declared the `DataCollector` trait, we can add a default implementation for it being wrapped by a box.
 
 ```rust
+// -------------------------------------
 // data_collector.rs
+// -------------------------------------
 impl<T: DataCollector + ?Sized> DataCollector for Box<T> {
     fn collect_data(&self) -> Vec<String> {
         T::collect_data(self)
@@ -435,7 +448,9 @@ The hard coded values should come from some configuration instead.
 So let's create the following configuration manager.
 
 ```rust
+// -------------------------------------
 // configuration_manager.rs
+// -------------------------------------
 pub struct ConfigurationManager {
     email_service_username: String,
     email_service_password: String,
@@ -477,8 +492,12 @@ We already saw with the `DateTime` example how to register a concrete type like 
 
 ```rust
 impl DependencyContainer {
-    pub fn configuration_manager(&self) -> ConfigurationManager {
+    fn create_configuration_manager(&self) -> ConfigurationManager {
         ConfigurationManager::new()
+    }
+
+    pub fn configuration_manager(&self) -> ConfigurationManager {
+        self.create_configuration_manager()
     }
 }
 ```
@@ -488,6 +507,7 @@ By using the configuration manager we have the following create method for the d
 
 ```rust
 impl DependencyContainer {
+    // Create [DataCollector] based on the configuration
     fn create_data_collector(
         &self,
         configuration_manager: ConfigurationManager,
@@ -514,6 +534,8 @@ We will create a simple public `data_collector()` method which will call this cr
 
 ```rust
 impl DependencyContainer {
+    // Developers can call this method easily without needing to know about the
+    // dependency on [ConfigurationManager]
     pub fn data_collector(&self) -> impl DataCollector {
         let configuration_manager = self.configuration_manager();
         self.create_data_collector(configuration_manager)
@@ -521,15 +543,16 @@ impl DependencyContainer {
 }
 ```
 
-And this method is easy for developers to call whenever they need a data collector.
+And this method is easy for developers to call whenever they need a data collector since it has no extra arguments.
 When we get to the monitoring system dependency, then our `create_monitoring_system()` method will have an argument for the data collector and another argument for the message service.
-These arguments will then be passed on to the monitoring system constructor as we'll see.
+These arguments will then be passed on to the monitoring system resolver as we'll see.
 
 ### Implementing Singleton Dependencies
 Using the same pattern we can make the dependency for the message service as follow.
 
 ```rust
 impl DependencyContainer {
+    // Get a [MessageService] which also needs the [ConfigurationManager]
     fn create_message_service(
         &self,
         configuration_manager: ConfigurationManager,
@@ -549,7 +572,9 @@ impl DependencyContainer {
     }
 }
 
+// -------------------------------------
 // message_service.rs
+// -------------------------------------
 pub trait MessageService {
     fn send_message(&self, message: &str);
 }
@@ -573,7 +598,7 @@ impl MessageService for EmailMessageService {
 }
 ```
 
-Notice how this also calls `configuration_manager()`.
+Notice how this also calls `configuration_manager()` too.
 This means we will construct, and therefore parse, the configuration twice.
 Once when we get the data collector and again to get the message service.
 This will be inefficient and leads to the need of singleton lifetimes.
@@ -596,15 +621,16 @@ impl DependencyContainer {
     }
 
     pub fn configuration_manager(&self) -> &ConfigurationManager {
+        // Use [OnceCell] to only create the [ConfigurationManager] once
         self.configuration_manager
-            .get_or_init(ConfigurationManager::new)
+            .get_or_init(|| self.create_configuration_manager())
     }
 }
 ```
 
 We need a field on the container to store the single instance of the configuration manager.
-This will also require an update of the container's constructor.
-Finally, we use the `get_or_init` from `OnceCell` to get the configuration manager if it was already created before, else it is created by calling the constructor.
+This will also require an update of the container's resolver.
+Finally, we use the `get_or_init` from `OnceCell` to get the configuration manager if it was already created before, else it is created by calling the create method.
 Notice, the return type also became a reference since we are reusing the same `ConfigurationManager` whenever this method is called.
 So `create_message_service()` and `create_data_collector()` needs to be updated to take references too.
 
@@ -613,7 +639,9 @@ Imagine the API data collector also wanted to log out each data point it collect
 This means the need for a logging service.
 
 ```rust
+// -------------------------------------
 // data_collector.rs
+// -------------------------------------
 pub struct ApiDataCollector<L: LoggingService> {
     api_key: String,
     logging_service: L,
@@ -640,7 +668,9 @@ impl<L: LoggingService> DataCollector for ApiDataCollector<L> {
     }
 }
 
+// -------------------------------------
 // logging_service.rs
+// -------------------------------------
 pub trait LoggingService {
     fn log(&self, message: &str);
 }
@@ -664,7 +694,7 @@ impl LoggingService for StdoutLoggingService {
 }
 ```
 
-Further, notice we want each logging instance to be linked to the alert check/id currently happening.
+Further, notice we want each logging instance to be linked to the alert check/id currently happening by taking in the alert ID on the constructor.
 This is the need for a scoped lifetime dependency.
 Like a singleton lifetime dependency this is easy to solve with a `OnceCell`.
 But we will need a way to reset the created object for "new scopes".
@@ -673,8 +703,12 @@ But we will need a way to reset the created object for "new scopes".
 use std::rc::Rc;
 
 pub struct DependencyContainer {
+    // This now has to be an [Rc] to be able to clone the singleton instance in
+    // the [new_scope] method
     configuration_manager: Rc<OnceCell<ConfigurationManager>>,
+    // Scope dependencies just use an [OnceCell]
     logging_service: OnceCell<StdoutLoggingService>,
+    // Some scope specific data
     alert_id: String,
 }
 
@@ -687,6 +721,7 @@ impl DependencyContainer {
         }
     }
 
+    // This has a dependency on some scope config
     fn create_logging_service(&self, alert_id: &str) -> StdoutLoggingService {
         StdoutLoggingService::new(alert_id)
     }
@@ -720,10 +755,14 @@ impl DependencyContainer {
         }
     }
 
+    /// Start a new scope for any scope specific dependencies
     pub fn new_scope(&self, alert_id: &str) -> Self {
         Self {
+            // Clone to have singleton behavior
             configuration_manager: self.configuration_manager.clone(),
+            // Make a new instance to have scope specific behavior
             logging_service: OnceCell::new(),
+            // Set scope config
             alert_id: alert_id.to_string(),
         }
     }
@@ -733,7 +772,7 @@ impl DependencyContainer {
 So let's create a `new_scope()` method on the dependency container.
 We will also add a new alert field to our dependency container to record the current alert run id for a scope.
 
-So our `new_scope` method will set this id, clone the current singleton lifetime, and will reset the `OnceCell` for the scoped lifetime object (logging service).
+Our `new_scope` method will set this id, clone the current singleton lifetime, and will reset the `OnceCell` for the scoped lifetime object (logging service).
 But to be able to clone the singleton object, we need the type inside the `OnceCell` to be clonable too.
 A way around this is to wrap that `OnceCell` with an `Rc` instead.
 
@@ -743,12 +782,16 @@ The singleton does a clone, while a scope resets the `OnceCell` to be ready to c
 The singleton uses `Rc<OnceCell<_>>` while the scope just uses `OnceCell`.
 
 However, this will fail to compile with an error of `'&StdoutLoggingService: LoggingService' is not satisfied`.
+We know from earlier that `OnceCell` caused the `ConfigurationManager` return type to become a reference.
+By looking at my editor's inlay hints, I can see the `logging_service` variable in this function is a reference too.
 Since `OnceCell` causes us to return a reference, we have the same issue we had earlier when returning a `Box<dyn Trait>`.
 The fix for this error is also the same.
 Implementing our trait for any references.
 
 ```rust
+// -------------------------------------
 // logging_service.rs
+// -------------------------------------
 impl<L: LoggingService + ?Sized> LoggingService for &L {
     fn log(&self, message: &str) {
         (*self).log(message);
@@ -758,7 +801,7 @@ impl<L: LoggingService + ?Sized> LoggingService for &L {
 
 But now we have a new error.
 And this is fine.
-We are following this manual process exactly to find all the edge cases before macroifying the process.
+We are following this manual process exactly to find all the edge cases before macro-ifying the process.
 
 The error states: `hidden type for 'impl LoggingService' captures lifetime that does not appear in bounds`.
 So let's take a closer look at that function.
@@ -773,9 +816,7 @@ pub fn logging_service(&self) -> impl LoggingService {
 }
 ```
 
-We know from earlier that `OnceCell` caused the `ConfigurationManager` return type to become a reference.
-By looking at my editors inlay hints, I can see the `logging_service` variable in this function is a reference too.
-So technically this function is returning a reference.
+We know this function is returning a reference.
 And because of Rust's ownership model, the compiler will need to know how long this reference is valid for.
 Since this reference is tight to `&self` (via the `logging_service` field), we can just add the same lifetime to self and the return type of this method.
 
@@ -827,7 +868,7 @@ The `ApiDataCollector` is generic over the logging service.
 Since the logging service is a reference type, because of it's scoped lifetime, `ApiDataCollector` now technically has a lifetime too.
 So the returned `Box` can potentially have a lifetime associated with it.
 
-But boxes default to having the `'static` lifetime.
+But [boxes default to having the `'static` lifetime](https://doc.rust-lang.org/reference/lifetime-elision.html#default-trait-object-lifetimes).
 And the actual lifetime is correctly detected to be that of `&self`.
 However, `&self` has a shorter lifetime than `'static`.
 Hence the error message of `&self` not living long enough.
@@ -860,6 +901,7 @@ use std::time::Duration;
 fn main() {
     let dc = DependencyContainer::new();
 
+    // Run forever in the background
     for i in 1.. {
         let alert_id = format!("Alert{}", i);
 
@@ -867,10 +909,8 @@ fn main() {
         let data_collector = dc.data_collector();
         let message_service = dc.message_service();
 
-        let monitoring_system = MonitoringSystem::new(
-            data_collector,
-            message_service
-        );
+        let monitoring_system =
+            MonitoringSystem::new(data_collector, message_service);
 
         monitoring_system.check_alert();
 
@@ -878,7 +918,9 @@ fn main() {
     }
 }
 
+// -------------------------------------
 // monitoring_system.rs
+// -------------------------------------
 pub struct MonitoringSystem<D: DataCollector, M: MessageService> {
     data_collector: D,
     message_service: M,
@@ -892,6 +934,10 @@ impl<D: DataCollector, M: MessageService> MonitoringSystem<D, M> {
         }
     }
 
+    // This function should be the only function with core business logic.
+    // Thus, it should be under proper tests.
+    // And it should not contain low-level details.
+    // Which will make it easy to test.
     pub fn check_alert(&self) {
         let data = self.data_collector.collect_data();
 
@@ -925,14 +971,22 @@ This means a transient lifetime.
 
 ```rust
 impl DependencyContainer {
-    pub fn notification_message_builder(
-        &self
+    fn create_notification_message_builder(
+        &self,
     ) -> impl NotificationMessageBuilder {
         DefaultNotificationMessageBuilder::new()
     }
+
+    pub fn notification_message_builder(
+        &self,
+    ) -> impl NotificationMessageBuilder {
+        self.create_notification_message_builder()
+    }
 }
 
+// -------------------------------------
 // notification_message_builder.rs
+// -------------------------------------
 pub trait NotificationMessageBuilder {
     fn build_message(&self, alert: &str) -> String;
 }
@@ -951,7 +1005,19 @@ impl NotificationMessageBuilder for DefaultNotificationMessageBuilder {
     }
 }
 
+// -------------------------------------
 // monitoring_system.rs
+// -------------------------------------
+pub struct MonitoringSystem<
+    D: DataCollector,
+    M: MessageService,
+    B: NotificationMessageBuilder,
+> {
+    data_collector: D,
+    message_service: M,
+    notification_message_builder: B,
+}
+
 impl<D: DataCollector, M: MessageService, B: NotificationMessageBuilder>
     MonitoringSystem<D, M, B>
 {
@@ -994,6 +1060,7 @@ So let's add that to the dependency container.
 
 ```rust
 impl DependencyContainer {
+    // Ingest all the dependencies needed to build a [MonitoringSystem]
     fn create_monitoring_system(
         &self,
         data_collector: impl DataCollector,
@@ -1011,6 +1078,10 @@ impl DependencyContainer {
         )
     }
 
+    // Method which is easy for other developers to call since it knows nothing
+    // about the dependencies of [MonitoringSystem].
+    // It also has to use the wildcard lifetimes to correctly link the
+    // references to `&self`.
     pub fn monitoring_system(
         &self,
     ) -> MonitoringSystem<
@@ -1033,10 +1104,12 @@ impl DependencyContainer {
 fn main() {
     let dc = DependencyContainer::new();
 
+    // Run forever in the background
     for i in 1.. {
         let alert_id = format!("Alert{}", i);
 
         let dc = dc.new_scope(&alert_id);
+        // Resolving a [MonitoringSystem] is now easy
         let monitoring_system = dc.monitoring_system();
 
         monitoring_system.check_alert();
@@ -1103,6 +1176,7 @@ impl DependencyContainer {
         })
     }
 
+    // Construct the logging service only if it is needed by using a callback
     fn create_data_collector<'a, L>(
         &self,
         configuration_manager: &ConfigurationManager,
@@ -1152,6 +1226,7 @@ use tokio::time::sleep;
 
 impl StdoutLoggingService {
     pub async fn new(alert_id: &str) -> Self {
+        // Simulate some async work
         sleep(Duration::from_millis(50)).await;
 
         StdoutLoggingService {
@@ -1164,7 +1239,7 @@ impl StdoutLoggingService {
 This is not much of an issue.
 We just have to make all the functions in this calltree async too.
 And this is easy for all the functions we created so far.
-It is also the lazy instantiation function that is a bit complex.
+It is only the lazy instantiation function that is a bit complex.
 And we have to swap `OnceCell` out for something that has async support too.
 
 ```rust
@@ -1261,6 +1336,7 @@ impl DependencyContainer {
 async fn main() {
     let dc = DependencyContainer::new();
 
+    // Run forever in the background
     for i in 1.. {
         let alert_id = format!("Alert{}", i);
 
@@ -1292,7 +1368,7 @@ Here is a recap of all the patterns needed to address each of the requirements w
 
 ### Concrete Type Dependencies
 These are the simplest.
-We just return the type as is.
+We just return the type as seen for the `ConfigurationManager`.
 
 ```rust
 impl DependencyContainer {
@@ -1309,6 +1385,7 @@ impl DependencyContainer {
 ### Trait-Based Dependencies
 This is the main use case for DI.
 Here we can return a single abstract type while also taking advantage of static dispatch.
+This was seen in the `MessageService` example.
 
 ```rust
 impl DependencyContainer {
@@ -1324,7 +1401,7 @@ impl DependencyContainer {
 
 ### Dynamic Trait Dependencies
 But sometimes the concrete type needs to be decided based off some runtime config.
-This requires the use of dynamic dispatch.
+This requires the use of dynamic dispatch which was seen in for `DataCollector`.
 
 ```rust
 impl DependencyContainer {
@@ -1382,7 +1459,7 @@ impl DependencyContainer {
 ### Lazy and Conditional Dependencies
 Sometimes a dependency in the chain might be conditionally needed.
 So we want to avoid creating the dependency in cases when it will not be needed.
-This is solved by using a `Fn` callback argument.
+This is solved by using a `Fn` callback argument as seen for the `LoggingService`.
 
 ```rust
 impl DependencyContainer {
@@ -1413,7 +1490,7 @@ impl DependencyContainer {
 ### Transient Dependencies
 These are the "default" since they require nothing special.
 They just use the normal private `create_*` to hide any dependencies and configuration.
-And then have the simple public which is called without any arguments.
+And then have the simple public method which is called without any arguments.
 Thus all the above cheatsheet examples are all transient dependencies.
 So the dependencies will be created anew with every call.
 
@@ -1421,6 +1498,10 @@ So the dependencies will be created anew with every call.
 This is a lifetime that does require some changes.
 But we only have to add a field to `DependencyContainer` and update the public function by wrapping its content in a `get_or_init()` call.
 And we also create a method to easily make new scopes.
+
+Because these return a reference, we may also need to use the wildcard lifetime to correctly link with the `&self` argument's lifetime.
+But this is only if the return type is a `impl Trait` like `DataCollector`.
+It is not needed for concrete types like `ConfigurationManager`.
 
 ```rust
 struct DependencyContainer {
@@ -1442,7 +1523,7 @@ impl DependencyContainer {
         }
     }
 
-    pub fn impl_abstract_scoped(&self) -> impl Abstract {
+    pub fn impl_abstract_scoped(&self) -> impl Abstract + '_ {
         self.impl_abstract
             .get_or_init(|| {
                 let arg = self.scope_config;
@@ -1466,7 +1547,7 @@ impl<T: Abstract + ?Sized> Abstract for &T
 ```
 
 ### Singleton Dependencies
-A singleton has the same pattern as a scope.
+A singleton has the same pattern as a scope and also has the same wildcard lifetime need.
 Except that it needs to clone the `OnceCell` when a new scope is created.
 This requires wrapping the `OnceCell` in a `Rc`.
 
@@ -1488,7 +1569,7 @@ impl DependencyContainer {
         }
     }
 
-    pub fn impl_abstract_singleton(&self) -> impl Abstract {
+    pub fn impl_abstract_singleton(&self) -> impl Abstract + '_ {
         self.impl_abstract
             .get_or_init(|| {
                 let arg = self.config;
@@ -1545,7 +1626,7 @@ While this manual approach is effective, it can be verbose, especially for large
 However, it provides a solid foundation for understanding how DI works in Rust and sets the stage for further optimizations.
 
 In future articles, we'll explore how to automate much of this boilerplate using Rust's powerful procedural macros, potentially reducing the verbosity while maintaining the type safety and flexibility we've achieved here.
-As a macro designer I can already see the private `create_*` methods provide enough details to allow all the other methods and `DependencyContainer` struct to be generated by a macro.
+As a macro designer I can already see the private `create_*` methods provide enough details to allow all the other methods and the `DependencyContainer` struct to be generated by a macro.
 
 I encourage you to experiment with these patterns in your own Rust projects.
 They can significantly improve the modularity and testability of your code, especially in larger applications.
