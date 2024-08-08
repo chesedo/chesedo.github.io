@@ -31,6 +31,15 @@
   "license": "http://creativecommons.org/licenses/by-nc/4.0/"
 }
 </script>
+
+<meta property="og:title" content="{{ page.title }}">
+<meta property="og:description" content="{{ page.description }}">
+<meta property="og:url" content="{{ current_url | safe }}">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary">
+<meta name="author" content="{{ config.extra.author_name }}">
+<meta name="keywords" content="{{ page.taxonomies.tags | join(sep=', ') }}">
+<meta name="robots" content="index, follow">
 {% endblock head %}
 
 {% block content %}
