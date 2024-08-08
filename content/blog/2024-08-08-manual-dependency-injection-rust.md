@@ -3,6 +3,7 @@ title = "Mastering Dependency Injection in Rust: Crafting a Custom Container"
 description = "Learn how to implement a custom Dependency Injection (DI) container in Rust. This comprehensive guide covers various dependency types, lifetimes, and advanced patterns, providing a solid foundation for building modular and testable Rust applications."
 [taxonomies]
 tags = ["Rust", "Dependency Injection", "Software Design", "Advanced Rust", "Software Architecture"]
+categories = ["Rust Dependency Injection"]
 +++
 
 In modern software development, managing dependencies efficiently is essential for creating scalable and maintainable applications.

@@ -3,6 +3,36 @@
 {% block title %}{{ page.title }} - {{ config.title }}{% endblock title %}
 {% block description %}{{ page.description }}{% endblock description %}
 
+{% block head %}
+{{ super() }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ page.title }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ config.extra.author_name }}"
+  },
+  "datePublished": "{{ page.date | date(format='%+') }}",
+  "dateModified": "{{ page.date | date(format='%+') }}",
+  "publisher": {
+    "@type": "Person",
+    "name": "{{ config.extra.author_name }}"
+  },
+  "description": "{{ page.description }}",
+  "keywords": {{ page.taxonomies.tags | json_encode() | safe }},
+  "wordCount": "{{ page.word_count }}",
+  "articleBody": "{{ page.content | striptags | truncate(length=200) }}",
+  "url": "{{ current_url | safe }}",
+  "inLanguage": "en-US",
+  "genre": "{{ page.taxonomies.categories[0] | default(value='Rust') }}",
+  "timeRequired": "PT{{ page.reading_time }}M",
+  "license": "http://creativecommons.org/licenses/by-nc/4.0/"
+}
+</script>
+{% endblock head %}
+
 {% block content %}
 <main class="container grow mx-auto px-4 py-8">
     <article class="max-w-3xl mx-auto">
