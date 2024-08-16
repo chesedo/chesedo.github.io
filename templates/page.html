@@ -80,6 +80,56 @@
             {{ page.content | safe }}
         </div>
 
+        {% if page.taxonomies.categories %}
+            {% set this_category = page.taxonomies.categories | first %}
+            {% set category = get_taxonomy_term(kind="categories", term=this_category) %}
+            {% set posts_in_category = category.pages | sort(attribute="date") %}
+
+            {% set found_current = false %}
+
+            {% for p in posts_in_category %}
+                {% if found_current %}
+                    {% set_global next_page = p %}
+                    {% break %}
+                {% endif %}
+
+                {% if p.permalink == page.permalink %}
+                    {% set_global found_current = true %}
+                {% else %}
+                    {% set_global prev_page = p %}
+                {% endif %}
+            {% endfor %}
+
+            <div class="my-8 py-6 border-y border-gray-200">
+                <h3 class="text-center text-lg font-semibold text-gray-700 mb-4">More in the "{{ this_category }}" series</h3>
+                <div class="flex flex-col sm:flex-row justify-between px-4 space-y-4 sm:space-y-0">
+                    {% if prev_page %}
+                        <a href="{{ prev_page.permalink }}" class="text-premium-gold-800 hover:text-premium-gold-600 transition duration-300 flex items-start sm:w-5/12">
+                            <span class="mr-2 text-xl">&larr;</span>
+                            <span class="text-sm">
+                                <span class="block text-gray-600">Previous</span>
+                                <span class="font-medium">{{ prev_page.title }}</span>
+                            </span>
+                        </a>
+                    {% else %}
+                        <span class="sm:w-5/12"></span>
+                    {% endif %}
+
+                    {% if next_page %}
+                        <a href="{{ next_page.permalink }}" class="text-premium-gold-800 hover:text-premium-gold-600 transition duration-300 flex items-start sm:w-5/12 sm:justify-end text-right">
+                            <span class="text-sm">
+                                <span class="block text-gray-600">Next</span>
+                                <span class="font-medium">{{ next_page.title }}</span>
+                            </span>
+                            <span class="ml-2 text-xl">&rarr;</span>
+                        </a>
+                    {% else %}
+                        <span class="sm:w-5/12"></span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
         <!-- Author Bio -->
         <div class="bg-white shadow-md rounded-lg mb-8">
             <div class="bg-gray-100 py-4 px-6 border-b border-gray-200">
