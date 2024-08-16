@@ -346,6 +346,7 @@ Next, we want to choose which one to use at runtime.
 So our method should be able to return both.
 Hence, we might try the following.
 
+{% non_compiling_code(error="'if' and 'else' have incompatible types") %}
 ```rust
 impl DependencyContainer {
     // Attempt to conditional choose the [DataCollector] at runtime
@@ -358,6 +359,8 @@ impl DependencyContainer {
     }
 }
 ```
+{% end %}
+
 
 {% collapsible(title="data_collector.rs") %}
 ```rust
@@ -385,6 +388,7 @@ So the block in the previous section replaces the `impl DataCollector` return ty
 But this new section has both `SimpleDataCollector` and `SqlDataCollector` for return types so the compiler does not know what to replace the `impl DataCollector` return type with.
 The solution is to rather return `dyn DataCollector`.
 
+{% non_compiling_code(error="doesn't have a size known at compile-time") %}
 ```rust
 impl DependencyContainer {
     fn create_data_collector_dyn_error(&self) -> dyn DataCollector {
@@ -396,6 +400,7 @@ impl DependencyContainer {
     }
 }
 ```
+{% end %}
 
 This gives a new `doesn't have a size known at compile-time`.
 By returning a `dyn` type we are switching from [static dispatch to dynamic dispatch](https://www.youtube.com/watch?v=xcygqF5LVmM).

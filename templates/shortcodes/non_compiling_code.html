@@ -1,0 +1,9 @@
+<div class="non-compiling">
+    {{ body | markdown | safe }}
+    {% if error %}
+    <div class="error">
+        <strong>Compile Error:</strong>
+        <pre>{{ error }}</pre>
+    </div>
+    {% endif %}
+</div>
