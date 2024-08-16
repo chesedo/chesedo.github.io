@@ -10,7 +10,7 @@ in with nixpkgs;
 stdenv.mkDerivation {
   name = "moz_overlay_shell";
   buildInputs = with nixpkgs; [
-    ((rustChannelOf { channel = "1.79.0"; }).rust.override {
+    ((rustChannelOf { channel = "1.80.0"; }).rust.override {
       extensions = [ "rust-src" ];
     })
     cargo-watch
