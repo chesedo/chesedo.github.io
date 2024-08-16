@@ -1,0 +1,8 @@
+<details class="my-6 rounded-lg overflow-hidden border border-premium-gold-200">
+    <summary class="px-4 py-2 bg-premium-gold-100 text-premium-gold-800 font-serif cursor-pointer hover:bg-premium-gold-200 transition-colors duration-200">
+        {{ title }}
+    </summary>
+    <div>
+        {{ body | markdown | safe }}
+    </div>
+</details>

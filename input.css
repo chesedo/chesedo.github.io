@@ -35,3 +35,55 @@ h6 {
   font-size: 16px; /* Fixes text overflowing their boxes */
   line-height: initial;
 }
+
+.alert {
+  @apply my-6 p-4 border-l-4 rounded-lg shadow-md;
+}
+
+.alert-info {
+  @apply bg-premium-gold-100 border-premium-gold-500 text-premium-gold-800;
+}
+
+.alert-warning {
+  @apply bg-yellow-100 border-yellow-500 text-yellow-800;
+}
+
+.alert-danger {
+  @apply bg-red-100 border-red-500 text-red-800;
+}
+
+.alert strong {
+  @apply font-serif text-lg mr-2;
+}
+
+details > div > pre:first-child {
+  @apply mt-0 rounded-t-none;
+}
+
+details > div > pre:last-child {
+  @apply mb-0 rounded-b-none;
+}
+
+.non-compiling {
+  @apply my-6 border border-red-300 rounded-lg overflow-hidden
+}
+
+.non-compiling pre {
+  @apply m-0
+}
+
+.non-compiling button {
+  @apply bg-red-100 text-red-800 border-red-200
+}
+
+.non-compiling button:hover {
+  @apply bg-red-200
+}
+
+.non-compiling .error {
+  @apply bg-red-50 text-red-700 text-base px-4 py-2 border-t border-red-200
+}
+
+.non-compiling .error pre {
+  @apply mt-2 text-sm overflow-x-auto
+}

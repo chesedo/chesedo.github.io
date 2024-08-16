@@ -259,6 +259,12 @@ In the following sections, we'll implement our dependency container step by step
 Let's continue with the list of requirements for the dependency container.
 We will now address each item in the list starting with returning concrete types.
 
+{% info() %}
+This section is long.
+But I still want to show any contextual code that will make it easier to follow along.
+So I'll be showing these code pieces in collapsibles for anyone interested.
+{% end %}
+
 ### Implementing Concrete Type Returns
 This is a simple case.
 To return a concrete type like `DateTime` we simply use that type as the return type and construct it in the method.
@@ -297,10 +303,10 @@ impl DependencyContainer {
         SimpleDataCollector::new("api_key".to_string())
     }
 }
+```
 
-// -------------------------------------
-// data_collector.rs
-// -------------------------------------
+{% collapsible(title="data_collector.rs") %}
+```rust
 pub trait DataCollector {
     fn collect_data(&self) -> Vec<String>;
 }
@@ -321,6 +327,7 @@ impl DataCollector for SimpleDataCollector {
     }
 }
 ```
+{% end %}
 
 This is the primary case why we are using Dependency Injection.
 These types are technical details the programmers understand, but does not affect how the business logic works at all.
@@ -339,6 +346,7 @@ Next, we want to choose which one to use at runtime.
 So our method should be able to return both.
 Hence, we might try the following.
 
+{% non_compiling_code(error="'if' and 'else' have incompatible types") %}
 ```rust
 impl DependencyContainer {
     // Attempt to conditional choose the [DataCollector] at runtime
@@ -350,10 +358,12 @@ impl DependencyContainer {
         }
     }
 }
+```
+{% end %}
 
-// -------------------------------------
-// data_collector.rs
-// -------------------------------------
+
+{% collapsible(title="data_collector.rs") %}
+```rust
 pub struct SqlDataCollector {
     connection_string: String,
 }
@@ -370,6 +380,7 @@ impl DataCollector for SqlDataCollector {
     }
 }
 ```
+{% end %}
 
 This will give a `'if' and 'else' have incompatible types` compile error.
 This is because the `impl` return type is a syntax sugar for a generic return type... well almost atleast.
@@ -377,6 +388,7 @@ So the block in the previous section replaces the `impl DataCollector` return ty
 But this new section has both `SimpleDataCollector` and `SqlDataCollector` for return types so the compiler does not know what to replace the `impl DataCollector` return type with.
 The solution is to rather return `dyn DataCollector`.
 
+{% non_compiling_code(error="doesn't have a size known at compile-time") %}
 ```rust
 impl DependencyContainer {
     fn create_data_collector_dyn_error(&self) -> dyn DataCollector {
@@ -388,6 +400,7 @@ impl DependencyContainer {
     }
 }
 ```
+{% end %}
 
 This gives a new `doesn't have a size known at compile-time`.
 By returning a `dyn` type we are switching from [static dispatch to dynamic dispatch](https://www.youtube.com/watch?v=xcygqF5LVmM).
@@ -445,12 +458,10 @@ You might have noticed three things so far (or some of them)
 
 This is a good segue into dependencies that require other dependencies.
 The hard coded values should come from some configuration instead.
-So let's create the following configuration manager.
+So we'll use a configuration manager.
 
+{% collapsible(title="configuration_manager.rs") %}
 ```rust
-// -------------------------------------
-// configuration_manager.rs
-// -------------------------------------
 pub struct ConfigurationManager {
     email_service_username: String,
     email_service_password: String,
@@ -488,6 +499,8 @@ impl ConfigurationManager {
     }
 }
 ```
+{% end %}
+
 We already saw with the `DateTime` example how to register a concrete type like this as a dependency with the follow code:
 
 ```rust
@@ -571,10 +584,10 @@ impl DependencyContainer {
         self.create_message_service(self.configuration_manager())
     }
 }
+```
 
-// -------------------------------------
-// message_service.rs
-// -------------------------------------
+{% collapsible(title="message_service.rs") %}
+```rust
 pub trait MessageService {
     fn send_message(&self, message: &str);
 }
@@ -597,6 +610,7 @@ impl MessageService for EmailMessageService {
     }
 }
 ```
+{% end %}
 
 Notice how this also calls `configuration_manager()` too.
 This means we will construct, and therefore parse, the configuration twice.
@@ -638,10 +652,8 @@ So `create_message_service()` and `create_data_collector()` needs to be updated 
 Imagine the API data collector also wanted to log out each data point it collected before returning to the caller.
 This means the need for a logging service.
 
+{% collapsible(title="data_collector.rs") %}
 ```rust
-// -------------------------------------
-// data_collector.rs
-// -------------------------------------
 pub struct ApiDataCollector<L: LoggingService> {
     api_key: String,
     logging_service: L,
@@ -667,10 +679,11 @@ impl<L: LoggingService> DataCollector for ApiDataCollector<L> {
         data
     }
 }
+```
+{% end %}
 
-// -------------------------------------
-// logging_service.rs
-// -------------------------------------
+{% collapsible(title="logging_service.rs") %}
+```rust
 pub trait LoggingService {
     fn log(&self, message: &str);
 }
@@ -693,6 +706,7 @@ impl LoggingService for StdoutLoggingService {
     }
 }
 ```
+{% end %}
 
 Further, notice we want each logging instance to be linked to the alert check/id currently happening by taking in the alert ID on the constructor.
 This is the need for a scoped lifetime dependency.
@@ -917,10 +931,10 @@ fn main() {
         sleep(Duration::from_secs(5));
     }
 }
+```
 
-// -------------------------------------
-// monitoring_system.rs
-// -------------------------------------
+{% collapsible(title="monitoring_system.rs") %}
+```rust
 pub struct MonitoringSystem<D: DataCollector, M: MessageService> {
     data_collector: D,
     message_service: M,
@@ -949,6 +963,7 @@ impl<D: DataCollector, M: MessageService> MonitoringSystem<D, M> {
     }
 }
 ```
+{% end %}
 
 This is the first section were we finally had to use generics.
 First to pass the logging service to the `ApiDataCollector`.
@@ -983,10 +998,10 @@ impl DependencyContainer {
         self.create_notification_message_builder()
     }
 }
+```
 
-// -------------------------------------
-// notification_message_builder.rs
-// -------------------------------------
+{% collapsible(title="notification_message_builder.rs") %}
+```rust
 pub trait NotificationMessageBuilder {
     fn build_message(&self, alert: &str) -> String;
 }
@@ -1004,10 +1019,11 @@ impl NotificationMessageBuilder for DefaultNotificationMessageBuilder {
         format!("Alert Notification: {}", alert)
     }
 }
+```
+{% end %}
 
-// -------------------------------------
-// monitoring_system.rs
-// -------------------------------------
+{% collapsible(title="monitoring_system.rs") %}
+```rust
 pub struct MonitoringSystem<
     D: DataCollector,
     M: MessageService,
@@ -1046,6 +1062,7 @@ impl<D: DataCollector, M: MessageService, B: NotificationMessageBuilder>
     }
 }
 ```
+{% end %}
 
 These are easy: we just need a method to return these.
 So no need to use `OnceCell` or store anything on our dependency container.

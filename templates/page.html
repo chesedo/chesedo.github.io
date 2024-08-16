@@ -225,6 +225,11 @@
 
      window.addEventListener('resize', updateButtonPosition);
      window.addEventListener('scroll', updateButtonPosition);
+
+     // Update button position if any collapsible is toggled
+     document.querySelectorAll('details').forEach((el) => {
+         el.addEventListener('toggle', updateButtonPosition);
+     });
      updateButtonPosition();
  });
 </script>
