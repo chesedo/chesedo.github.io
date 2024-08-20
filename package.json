@@ -12,7 +12,7 @@
     "clean": "npm run clean:content && npm run clean:compose",
     "watch": "tailwindcss -i input.css -o static/css/styles.css --watch",
     "serve": "zola serve",
-    "dev": "concurrently \"npm run dev:kroki\" \"npm run watch\" \"npm run serve\"",
+    "dev": "npm run dev:kroki && concurrently \"npm run watch\" \"npm run serve\"",
     "dev:kroki": "podman-compose up -d"
   },
   "devDependencies": {
