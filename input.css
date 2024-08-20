@@ -73,14 +73,16 @@ details > div > pre:last-child {
   @apply mb-0 rounded-b-none;
 }
 
+/* Compile Error and Terminal Output Styles */
 .non-compiling {
-  @apply my-6 border border-red-300 rounded-lg overflow-hidden
+  @apply my-6 border border-red-300 rounded overflow-hidden
 }
 
 .non-compiling pre {
   @apply m-0
 }
 
+/* Overwrite copy button */
 .non-compiling button {
   @apply bg-red-100 text-red-800 border-red-200
 }
@@ -89,29 +91,32 @@ details > div > pre:last-child {
   @apply bg-red-200
 }
 
+.non-compiling .error, .terminal-output {
+  @apply mt-0 border-t
+}
+
 .non-compiling .error {
-  @apply bg-red-50 text-red-700 text-base px-4 py-2 border-t border-red-200
+  @apply border-red-400
 }
 
-.non-compiling .error pre {
-  @apply mt-2 text-sm overflow-x-auto
-}
-
-/* Terminal Output Styles */
 .terminal-output {
-    @apply mt-0 border-t border-premium-gold-600 rounded;
+  @apply border-premium-gold-600 rounded
+}
+
+.non-compiling .error strong, .terminal-heading {
+    @apply bg-gray-700 px-4 py-2 font-semibold text-sm
+}
+
+.non-compiling .error strong {
+    @apply block text-red-700
 }
 
 .terminal-heading {
-    @apply bg-gray-700 text-premium-gold-300 px-4 py-2 font-semibold text-sm rounded-t;
+    @apply text-premium-gold-300 rounded-t
 }
 
-.terminal-output pre {
-    @apply m-0 p-4 bg-gray-800 text-gray-200 rounded-t-none rounded-b overflow-x-auto;
-}
-
-.terminal-output code {
-    @apply font-mono text-sm;
+.non-compiling .error pre, .terminal-output pre {
+  @apply font-mono text-sm m-0 p-4 bg-gray-800 text-gray-200 rounded-t-none rounded-b overflow-x-auto
 }
 
 /* ANSI color classes */
@@ -131,5 +136,5 @@ pre + .terminal-output {
 }
 
 pre + .terminal-output .terminal-heading {
-    @apply rounded-t-none;
+    @apply rounded-t-none
 }
