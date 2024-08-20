@@ -4,7 +4,7 @@
 
 /* Apply sans to the body */
 body {
-    @apply font-sans bg-gray-50 text-gray-800;
+  @apply font-sans bg-gray-50 text-gray-800;
 }
 
 /* Apply serif to all headings */
@@ -14,12 +14,12 @@ h3,
 h4,
 h5,
 h6 {
-    @apply font-serif;
+  @apply font-serif;
 }
 
 /* Prose overrides for code blocks and terminal output */
 .prose pre code {
-    line-height: 0.6em;
+  line-height: 0.6em;
 }
 
 .mermaid-diagram {
@@ -104,15 +104,15 @@ details > div > pre:last-child {
 }
 
 .non-compiling .error strong, .terminal-heading {
-    @apply bg-gray-700 px-4 py-2 font-semibold text-sm
+  @apply bg-gray-700 px-4 py-2 font-semibold text-sm
 }
 
 .non-compiling .error strong {
-    @apply block text-red-700
+  @apply block text-red-700
 }
 
 .terminal-heading {
-    @apply text-premium-gold-300 rounded-t
+  @apply text-premium-gold-300 rounded-t
 }
 
 .non-compiling .error pre, .terminal-output pre {
@@ -132,9 +132,9 @@ details > div > pre:last-child {
 
 /* Adjust code block styling to work with terminal output */
 pre + .terminal-output {
-    @apply -mt-8 rounded-t-none
+  @apply -mt-8 rounded-t-none
 }
 
 pre + .terminal-output .terminal-heading {
-    @apply rounded-t-none
+  @apply rounded-t-none
 }
