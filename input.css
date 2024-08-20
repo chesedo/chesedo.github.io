@@ -17,6 +17,11 @@ h6 {
     @apply font-serif;
 }
 
+/* Prose overrides for code blocks and terminal output */
+.prose pre code {
+    line-height: 0.6em;
+}
+
 .mermaid-diagram {
   @apply my-8 mx-auto max-w-full overflow-x-auto;
 }
@@ -56,6 +61,10 @@ h6 {
   @apply font-serif text-lg mr-2;
 }
 
+.alert strong + p {
+  @apply inline my-0;
+}
+
 details > div > pre:first-child {
   @apply mt-0 rounded-t-none;
 }
@@ -86,4 +95,41 @@ details > div > pre:last-child {
 
 .non-compiling .error pre {
   @apply mt-2 text-sm overflow-x-auto
+}
+
+/* Terminal Output Styles */
+.terminal-output {
+    @apply mt-0 border-t border-premium-gold-600 rounded;
+}
+
+.terminal-heading {
+    @apply bg-gray-700 text-premium-gold-300 px-4 py-2 font-semibold text-sm rounded-t;
+}
+
+.terminal-output pre {
+    @apply m-0 p-4 bg-gray-800 text-gray-200 rounded-t-none rounded-b overflow-x-auto;
+}
+
+.terminal-output code {
+    @apply font-mono text-sm;
+}
+
+/* ANSI color classes */
+.ansi-bold { @apply font-bold; }
+.ansi-dim { @apply opacity-75; }
+.ansi-italic { @apply italic; }
+.ansi-red { @apply text-red-400; }
+.ansi-green { @apply text-green-400; }
+.ansi-yellow { @apply text-yellow-300; }
+.ansi-blue { @apply text-blue-300; }
+.ansi-magenta { @apply text-purple-300; }
+.ansi-cyan { @apply text-cyan-300; }
+
+/* Adjust code block styling to work with terminal output */
+pre + .terminal-output {
+    @apply -mt-8 rounded-t-none
+}
+
+pre + .terminal-output .terminal-heading {
+    @apply rounded-t-none;
 }
