@@ -96,8 +96,8 @@ The [documentation for `async-trait`](https://docs.rs/async-trait/latest/async_t
 But wait, our `sub_task` also returns a future. 🤔
 
 By looking at the `tracing::instrument` code, I see it eventually calls [this function](https://github.com/tokio-rs/tracing/blob/527b4f66a604e7a6baa6aa7536428e3a303ba3c8/tracing-attributes/src/expand.rs#L550) to determine whether the macro annotated function implements a manual async or not.
-According to the functions documentation, it should only detect pin boxed futures.
-But it will also [check if the last statement in th e function is an async expression](https://github.com/tokio-rs/tracing/blob/527b4f66a604e7a6baa6aa7536428e3a303ba3c8/tracing-attributes/src/expand.rs#L571-L590).
+According to the function's documentation, it should only detect pin boxed futures.
+But it will also [check if the last statement in the function is an async expression](https://github.com/tokio-rs/tracing/blob/527b4f66a604e7a6baa6aa7536428e3a303ba3c8/tracing-attributes/src/expand.rs#L571-L590).
 So it seems the `instrument` macro is messing up the expanded block.
 Let's confirm this by changing the function to not have an async statement as the last item in the function.
 
@@ -250,12 +250,12 @@ async fn work() {
     [2;3mat[0m src/main.rs:35 [2;3mon[0m ThreadId(16)
 {% end %}
 
-Now it is "incorrect" again and has a different thread id just like the `JoinSet`.
+Now it is "incorrect" again and has a different thread ID just like the `JoinSet`.
 This confirms starting a manual spawn does the same as a `JoinSet`.
 
-Well... if you think about it, then it is actually correct.
+If you think about it, then "performing task" not having a parent is actually correct.
 Since we spawned it on a new thread, that thread no longer has the `work -> sub_task` span hierarchy.
-In fact, the "performing task" async is at the root of that thread and therefore correctly does not have any span parents in the logs.
+In fact, the "performing task" future is at the root of that thread and therefore correctly does not have any span parents in the logs.
 
 The span documentation already mentions the core of the issue when talking about an [entered span being held across an `.await` point](https://docs.rs/tracing/latest/tracing/span/struct.Span.html#in-asynchronous-code).
 The documentation explains that an issue might arise when another future is started / makes progress at an `.await` point.
