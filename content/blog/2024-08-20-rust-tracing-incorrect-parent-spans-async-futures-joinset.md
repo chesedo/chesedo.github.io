@@ -86,7 +86,6 @@ But then the issues start.
 The next "making sub task" is not associated with the `work -> sub_task` span hierarchy.
 Nor is "performing task" associated with the `work -> sub_task` span hierarchy.
 
-
 ## Understanding the Causes
 So what is happening here?
 Well, let's first focus on the "making sub task" log.
@@ -94,7 +93,7 @@ Well, let's first focus on the "making sub task" log.
 ### #[instrument] issues
 From the [`instrument` documentation](https://docs.rs/tracing-attributes/latest/tracing_attributes/attr.instrument.html) we see the macro also works with async functions which uses `async-trait`.
 The [documentation for `async-trait`](https://docs.rs/async-trait/latest/async_trait/#explanation) explains how it transforms async functions to return a pinned boxed future.
-But wait, our `sub_task` also returns a future. 🤔 
+But wait, our `sub_task` also returns a future. 🤔
 
 By looking at the `tracing::instrument` code, I see it eventually calls [this function](https://github.com/tokio-rs/tracing/blob/527b4f66a604e7a6baa6aa7536428e3a303ba3c8/tracing-attributes/src/expand.rs#L550) to determine whether the macro annotated function implements a manual async or not.
 According to the functions documentation, it should only detect pin boxed futures.
