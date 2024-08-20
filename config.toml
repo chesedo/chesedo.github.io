@@ -19,6 +19,13 @@ taxonomies = [
 highlight_code = true
 highlight_theme = "cheerfully-light"
 
+[link_checker]
+skip_anchor_prefixes = [
+    # The anchor checks fail for GitHub code. So skipping it
+    # See https://github.com/getzola/zola/issues/1056#issuecomment-655508322
+    "https://github.com",
+]
+
 [extra]
 author_name = "Pieter Engelbrecht"
 author_title = "Rust Consultant & Software Craftsman"
