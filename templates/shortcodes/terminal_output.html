@@ -1,7 +1,7 @@
 {% if body %}
 <div class="terminal-output">
     <div class="terminal-heading">Output</div>
-    <pre><code>{{ body | trim
+    <pre>{{ body | trim
         | replace(from="[0m", to="</span>")
         | replace(from="[1m", to='<span class="ansi-bold">')
         | replace(from="[2m", to='<span class="ansi-dim">')
@@ -19,7 +19,10 @@
         | replace(from="[1;35m", to='<span class="ansi-bold ansi-magenta">')
         | replace(from="[1;36m", to='<span class="ansi-bold ansi-cyan">')
         | replace(from="[2;3m", to='<span class="ansi-dim ansi-italic">')
+        | replace(from="[38;5;10m", to='<span class="ansi-green">')
+        | replace(from="[38;5;12m", to='<span class="ansi-blue">')
+        | replace(from="[38;5;14m", to='<span class="ansi-cyan">')
         | safe
-    }}</code></pre>
+    }}</pre>
 </div>
 {% endif %}

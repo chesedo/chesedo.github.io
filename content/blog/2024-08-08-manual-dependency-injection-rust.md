@@ -346,7 +346,19 @@ Next, we want to choose which one to use at runtime.
 So our method should be able to return both.
 Hence, we might try the following.
 
-{% non_compiling_code(error="'if' and 'else' have incompatible types") %}
+{% non_compiling_code(error='
+[0m[1m[38;5;9merror[E0308][0m[0m[1m: `if` and `else` have incompatible types[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/main.rs:26:13[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m23[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m/[0m[0m [0m[0m        if false {[0m
+[0m[1m[38;5;12m24[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m            SimpleDataCollector::new("api_key".to_string())[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m|[0m[0m             [0m[0m[1m[38;5;12m-----------------------------------------------[0m[0m [0m[0m[1m[38;5;12mexpected because of this[0m
+[0m[1m[38;5;12m25[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m        } else {[0m
+[0m[1m[38;5;12m26[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m            SqlDataCollector::new("connection_string".to_string())[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m|[0m[0m             [0m[0m[1m[38;5;9m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m[0m [0m[0m[1m[38;5;9mexpected `SimpleDataCollector`, found `SqlDataCollector`[0m
+[0m[1m[38;5;12m27[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m        }[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m [0m[0m[1m[38;5;12m|_________-[0m[0m [0m[0m[1m[38;5;12m`if` and `else` have incompatible types[0m
+') %}
 ```rust
 impl DependencyContainer {
     // Attempt to conditional choose the [DataCollector] at runtime
@@ -388,7 +400,18 @@ So the block in the previous section replaces the `impl DataCollector` return ty
 But this new section has both `SimpleDataCollector` and `SqlDataCollector` for return types so the compiler does not know what to replace the `impl DataCollector` return type with.
 The solution is to rather return `dyn DataCollector`.
 
-{% non_compiling_code(error="doesn't have a size known at compile-time") %}
+{% non_compiling_code(error="
+[0m[1m[38;5;9merror[E0746][0m[0m[1m: return type cannot have an unboxed trait object[0m
+[0m  [0m[0m[1m[38;5;12m--> [0m[0msrc/main.rs:30:50[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m30[0m[0m [0m[0m[1m[38;5;12m|[0m[0m [0m[0m    fn create_data_collector_dyn_error(&self) -> dyn DataCollector {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m                                                  [0m[0m[1m[38;5;9m^^^^^^^^^^^^^^^^^[0m[0m [0m[0m[1m[38;5;9mdoesn't have a size known at compile-time[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;14mhelp[0m[0m: return an `impl Trait` instead of a `dyn Trait`, if all returned values are the same type[0m
+[0m   [0m[0m[1m[38;5;12m|[0m
+[0m[1m[38;5;12m30[0m[0m [0m[0m[1m[38;5;12m| [0m[0m    fn create_data_collector_dyn_error(&self) -> [0m[0m[38;5;10mimpl [0m[0mDataCollector {[0m
+[0m   [0m[0m[1m[38;5;12m|[0m[0m                                                  [0m[0m[38;5;10m~~~~[0m
+") %}
 ```rust
 impl DependencyContainer {
     fn create_data_collector_dyn_error(&self) -> dyn DataCollector {

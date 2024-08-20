@@ -3,7 +3,30 @@
     {% if error %}
     <div class="error">
         <strong>Compile Error:</strong>
-        <pre>{{ error }}</pre>
+        <pre>{{ error | trim
+        | replace(from="[0m", to="</span>")
+        | replace(from="[1m", to='<span class="ansi-bold">')
+        | replace(from="[2m", to='<span class="ansi-dim">')
+        | replace(from="[3m", to='<span class="ansi-italic">')
+        | replace(from="[31m", to='<span class="ansi-red">')
+        | replace(from="[32m", to='<span class="ansi-green">')
+        | replace(from="[33m", to='<span class="ansi-yellow">')
+        | replace(from="[34m", to='<span class="ansi-blue">')
+        | replace(from="[35m", to='<span class="ansi-magenta">')
+        | replace(from="[36m", to='<span class="ansi-cyan">')
+        | replace(from="[1;31m", to='<span class="ansi-bold ansi-red">')
+        | replace(from="[1;32m", to='<span class="ansi-bold ansi-green">')
+        | replace(from="[1;33m", to='<span class="ansi-bold ansi-yellow">')
+        | replace(from="[1;34m", to='<span class="ansi-bold ansi-blue">')
+        | replace(from="[1;35m", to='<span class="ansi-bold ansi-magenta">')
+        | replace(from="[1;36m", to='<span class="ansi-bold ansi-cyan">')
+        | replace(from="[2;3m", to='<span class="ansi-dim ansi-italic">')
+        | replace(from="[38;5;9m", to='<span class="ansi-red">')
+        | replace(from="[38;5;10m", to='<span class="ansi-green">')
+        | replace(from="[38;5;12m", to='<span class="ansi-blue">')
+        | replace(from="[38;5;14m", to='<span class="ansi-cyan">')
+        | safe
+    }}</pre>
     </div>
     {% endif %}
 </div>
