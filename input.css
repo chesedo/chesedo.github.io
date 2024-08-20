@@ -61,6 +61,10 @@ h6 {
   @apply font-serif text-lg mr-2;
 }
 
+.alert strong + p {
+  @apply inline my-0;
+}
+
 details > div > pre:first-child {
   @apply mt-0 rounded-t-none;
 }
