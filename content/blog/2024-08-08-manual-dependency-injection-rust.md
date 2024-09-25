@@ -1,6 +1,7 @@
 +++
 title = "Mastering Dependency Injection in Rust: Crafting a Custom Container"
 description = "Learn how to implement a custom Dependency Injection (DI) container in Rust. This comprehensive guide covers various dependency types, lifetimes, and advanced patterns, providing a solid foundation for building modular and testable Rust applications."
+updated = 2024-09-25
 [taxonomies]
 tags = ["Rust", "Dependency Injection", "Software Design", "Advanced Rust", "Software Architecture"]
 categories = ["Rust Dependency Injection"]
@@ -30,7 +31,7 @@ Instead of creating dependencies directly, a component receives its dependencies
 
 ### Benefits of Dependency Injection in Software Design
 
-1. **Improved Testability**: By injecting dependencies, you can easily replace them with mocks or stubs during testing, allowing for more isolated and controlled tests.
+1. **Improved Testability**: By injecting dependencies, you can easily replace them with mocks or stubs during unit testing, allowing for more isolated and controlled tests.
 1. **Decoupling of Components**: DI promotes loose coupling between components, making your codebase more modular and easier to maintain.
 1. **Easier Maintenance**: With DI, you can change the implementation of a dependency without altering the components that use it, leading to more maintainable and adaptable code.
 
@@ -562,7 +563,7 @@ impl DependencyContainer {
 }
 ```
 
-We won't want developers to be concerned about the fact that this dependency requires the configuration manager to be constructed.
+We won't want developers to be concerned about the fact that this data collector dependency requires the configuration manager to be constructed.
 One of the requirements were, "we don't want developers to know which chain of dependencies are needed for any specific dependency they are trying to resolve".
 So we are making this method private.
 We will continue this pattern and all `create_*` methods will be private.
@@ -677,7 +678,7 @@ This means the need for a logging service.
 
 {% collapsible(title="data_collector.rs") %}
 ```rust
-pub struct ApiDataCollector<L: LoggingService> {
+pub struct ApiDataCollector<L> {
     api_key: String,
     logging_service: L,
 }
@@ -958,7 +959,7 @@ fn main() {
 
 {% collapsible(title="monitoring_system.rs") %}
 ```rust
-pub struct MonitoringSystem<D: DataCollector, M: MessageService> {
+pub struct MonitoringSystem<D, M> {
     data_collector: D,
     message_service: M,
 }
@@ -1047,11 +1048,7 @@ impl NotificationMessageBuilder for DefaultNotificationMessageBuilder {
 
 {% collapsible(title="monitoring_system.rs") %}
 ```rust
-pub struct MonitoringSystem<
-    D: DataCollector,
-    M: MessageService,
-    B: NotificationMessageBuilder,
-> {
+pub struct MonitoringSystem<D, M, B> {
     data_collector: D,
     message_service: M,
     notification_message_builder: B,
@@ -1545,7 +1542,7 @@ It is not needed for concrete types like `ConfigurationManager`.
 
 ```rust
 struct DependencyContainer {
-    impl_abstract: OnceCell<ConcreteType>, // Or OnceCell<Box<dyn Abstract>>
+    impl_abstract: OnceCell<ConcreteType>, // Or OnceCell<Box<dyn Abstract + 'a>>
     scope_config: String,
 }
 impl DependencyContainer {
@@ -1593,7 +1590,7 @@ This requires wrapping the `OnceCell` in a `Rc`.
 
 ```rust
 struct DependencyContainer {
-    // Or Rc<OnceCell<Box<dyn Abstract>>>
+    // Or Rc<OnceCell<Box<dyn Abstract + 'a>>>
     impl_abstract: Rc<OnceCell<ConcreteType>>,
 }
 impl DependencyContainer {
