@@ -1,5 +1,5 @@
 +++
-title = "Mastering Dependency Injection in Rust: Using a macro part 1"
+title = "Mastering Dependency Injection in Rust: Despatma basics"
 description = "Explore how to simplify dependency injection in Rust using a custom macro. Learn about concrete types, trait-based dependencies, dynamic traits, chaining, and async dependencies with the despatma crate."
 [taxonomies]
 tags = ["Rust", "Dependency Injection", "Software Design", "DesPatMa", "Software Architecture"]
