@@ -62,7 +62,7 @@ impl DependencyContainer {
 
 This will ensure `tracing` is only set up once during the lifecycle of the program.
 However, this needs to take a reference to the `ConfigurationManager`.
-As we saw in the [manual implementation how to use `OnceCell`](@/blog/2024-08-08-manual-dependency-injection-rust.md#implementing-singleton-dependencies) to control the construction of managed dependencies that `OnceCell` will cause our object to become a reference.
+As we saw in the [manual implementation on how to use `OnceCell`](@/blog/2024-08-08-manual-dependency-injection-rust.md#implementing-singleton-dependencies) to control the construction of managed dependencies, that `OnceCell` will cause our singleton and scoped objects to become references.
 
 ## Scoped
 A scoped dependency is setup in the same way.
@@ -129,7 +129,7 @@ By providing the type hint, we tell the macro which specific type to use for sto
 
 This type hint is supplied inside the lifetime attribute.
 Eg `#[Singleton(Postgres)]`
-This is also required for any methods which return an `impl Trait`
+This is always required for any methods which return an `impl Trait`
 
 ## Usage
 This updates adds a `new_scope()` method.
