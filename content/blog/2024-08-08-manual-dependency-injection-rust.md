@@ -43,10 +43,8 @@ Without DI, the monitoring system might directly create instances of the email s
 #### Easy Approach: Code Without Dependency Injection
 
 {% mermaid() %}
----
-title: Monitoring System without Dependency Injection
----
 classDiagram
+    accTitle: Monitoring System without Dependency Injection
     direction LR
     class MonitoringSystem {
         -EmailService email_service
@@ -84,10 +82,8 @@ With DI, we can inject the `EmailService` and `DataCollector` dependencies, maki
 #### Improved Design: Implementing Dependency Injection
 
 {% mermaid() %}
----
-title: Monitoring System with Dependency Injection
----
 classDiagram
+    accTitle: Monitoring System with Dependency Injection
     direction LR
     class MonitoringSystem {
         -MessageService message_service
