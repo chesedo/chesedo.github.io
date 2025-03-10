@@ -49,18 +49,18 @@ classDiagram
     class MonitoringSystem {
         -EmailService email_service
         -SimpleDataCollector data_collector
-        +new(\n    username: str,\n    password: str,\n    api_key: str\n) Self
+        +new(username, password, api_key) Self
         +check_for_alerts()
     }
     class EmailService {
         -username String
         -password String
-        +new(\n    username: str,\n    password: str\n) Self
-        +send(to: str, message: str)
+        +new(username, password) Self
+        +send(to, message)
     }
     class SimpleDataCollector {
         -api_key String
-        +new(api_key: str) Self
+        +new(api_key) Self
         +collect_data() Vec~String~
     }
 
@@ -88,12 +88,12 @@ classDiagram
     class MonitoringSystem {
         -MessageService message_service
         -DataCollector data_collector
-        +new(\n    message_service: MessageService,\n    data_collector: DataCollector\n) Self
+        +new(message_service, data_collector) Self
         +check_for_alerts()
     }
     class MessageService {
         <<interface>>
-        +send(to: str, message: str)
+        +send(to, message)
     }
     class DataCollector {
         <<interface>>
@@ -102,12 +102,12 @@ classDiagram
     class EmailService {
         -username String
         -password String
-        +new(username: str, password: str) Self
-        +send(to: str, message: str)
+        +new(username, password) Self
+        +send(to, message)
     }
     class SimpleDataCollector {
         -api_key String
-        +new(api_key: str) Self
+        +new(api_key) Self
         +collect_data() Vec~String~
     }
 
