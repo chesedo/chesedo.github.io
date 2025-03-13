@@ -1,7 +1,7 @@
 +++
 title = "Mastering Dependency Injection in Rust: Crafting a Custom Container"
 description = "Learn how to implement a custom Dependency Injection (DI) container in Rust. This comprehensive guide covers various dependency types, lifetimes, and advanced patterns, providing a solid foundation for building modular and testable Rust applications."
-updated = 2024-09-25
+updated = 2025-03-13
 [taxonomies]
 tags = ["Rust", "Dependency Injection", "Software Design", "Advanced Rust", "Software Architecture"]
 categories = ["Rust Dependency Injection"]
@@ -24,6 +24,10 @@ We'll cover:
 - How other languages implement DI
 - Rust's unique challenges and strengths in implementing DI
 - A step-by-step guide to crafting a custom DI container in Rust
+
+{% info() %}
+This article has been updated for Rust 2024 edition. If you're using an earlier Rust edition, pay attention to the collapsible edition notes throughout the article that highlight differences in code requirements.
+{% end %}
 
 ## Dependency Injection: The Foundation of Modular Software Design
 Dependency Injection (DI) is a design pattern that addresses how components obtain their dependencies.
@@ -833,9 +837,9 @@ impl<L: LoggingService + ?Sized> LoggingService for &L {
 }
 ```
 
-But now we have a new error.
-And this is fine.
-We are following this manual process exactly to find all the edge cases before macro-ifying the process.
+
+{% edition_note(edition="pre2024", summary="Explicit lifetime annotations were required", link="https://doc.rust-lang.org/edition-guide/rust-2024/rpit-lifetime-capture.html") %}
+Prior to the Rust 2024 edition an error would occur here.
 
 The error states: `hidden type for 'impl LoggingService' captures lifetime that does not appear in bounds`.
 So let's take a closer look at that function.
@@ -866,9 +870,11 @@ pub fn logging_service(&self) -> impl LoggingService + '_ {
     logging_service
 }
 ```
+{% end %}
 
-And now we have a new error again.
-And again this is good as it allows us to set the patterns to cover all edge cases.
+But now we have a new error.
+And this is fine.
+We are following this manual process exactly to find all the edge cases before macro-ifying the process.
 
 This time the error states the `DataCollector` in the following method `may not live long enough`.
 
@@ -897,7 +903,6 @@ fn create_data_collector(
 }
 ```
 
-This error is the same as the last one, but with a different error message.
 The `ApiDataCollector` is generic over the logging service.
 Since the logging service is a reference type, because of it's scoped lifetime, `ApiDataCollector` now technically has a lifetime too.
 So the returned `Box` can potentially have a lifetime associated with it.
@@ -908,7 +913,7 @@ However, `&self` has a shorter lifetime than `'static`.
 Hence the error message of `&self` not living long enough.
 
 We fix this by also having the `Box` have its lifetime linked to `&self`.
-And using the wildcard lifetime is again an easy way to do this.
+And using the wildcard lifetime is an easy way to do this.
 
 ```rust
 fn create_data_collector(
@@ -919,12 +924,14 @@ fn create_data_collector(
 }
 ```
 
+{% edition_note(edition="pre2024") %}
 Now we get another `captures lifetime that does not appear in bounds` on `data_collector()`.
 But we already know how to fix this with the wildcard lifetime.
 
 ```rust
 pub fn data_collector(&self) -> impl DataCollector + '_ { ... }
 ```
+{% end %}
 
 With all the errors fixed, our main can now use a new scope as follow to run alert checks indefinitely in the background.
 
@@ -1113,14 +1120,12 @@ impl DependencyContainer {
 
     // Method which is easy for other developers to call since it knows nothing
     // about the dependencies of [MonitoringSystem].
-    // It also has to use the wildcard lifetimes to correctly link the
-    // references to `&self`.
     pub fn monitoring_system(
         &self,
     ) -> MonitoringSystem<
-        impl DataCollector + '_,
-        impl MessageService + '_,
-        impl NotificationMessageBuilder + '_,
+        impl DataCollector,
+        impl MessageService,
+        impl NotificationMessageBuilder,
     > {
         let data_collector = self.data_collector();
         let message_service = self.message_service();
@@ -1203,7 +1208,7 @@ So we'll use an `Fn` argument as follow to receive a callback to create the logg
 
 ```rust
 impl DependencyContainer {
-    pub fn data_collector(&self) -> impl DataCollector + '_ {
+    pub fn data_collector(&self) -> impl DataCollector {
         self.create_data_collector(self.configuration_manager(), || {
             self.logging_service()
         })
@@ -1277,7 +1282,6 @@ And we have to swap `OnceCell` out for something that has async support too.
 
 ```rust
 use async_once_cell::OnceCell as AsyncOnceCell;
-use std::future::Future;
 use std::rc::Rc;
 
 pub struct DependencyContainer {
@@ -1303,13 +1307,14 @@ impl DependencyContainer {
         }
     }
 
-    async fn create_logging_service(&self, alert_id: &str)
-        -> StdoutLoggingService
-    {
+    async fn create_logging_service(
+        &self,
+        alert_id: &str,
+    ) -> StdoutLoggingService {
         StdoutLoggingService::new(alert_id).await
     }
 
-    pub async fn logging_service(&self) -> impl LoggingService + '_ {
+    pub async fn logging_service(&self) -> impl LoggingService {
         let logging_service = self
             .logging_service
             .get_or_init(self.create_logging_service(&self.alert_id)).await;
@@ -1317,13 +1322,12 @@ impl DependencyContainer {
         logging_service
     }
 
-    async fn create_data_collector<'a, F, L>(
+    async fn create_data_collector<'a, L>(
         &self,
         configuration_manager: &ConfigurationManager,
-        logging_service_fn: impl Fn() -> F,
+        logging_service_fn: impl AsyncFn() -> L,
     ) -> Box<dyn DataCollector + 'a>
     where
-        F: Future<Output = L>,
         L: LoggingService + 'a,
     {
         if let Some(api_key) = configuration_manager.get_api_key() {
@@ -1339,7 +1343,7 @@ impl DependencyContainer {
         }
     }
 
-    pub async fn data_collector(&self) -> impl DataCollector + '_ {
+    pub async fn data_collector(&self) -> impl DataCollector {
         self.create_data_collector(
             self.configuration_manager(),
             || self.logging_service()
@@ -1349,9 +1353,9 @@ impl DependencyContainer {
     pub async fn monitoring_system(
         &self,
     ) -> MonitoringSystem<
-        impl DataCollector + '_,
-        impl MessageService + '_,
-        impl NotificationMessageBuilder + '_,
+        impl DataCollector,
+        impl MessageService,
+        impl NotificationMessageBuilder,
     > {
         let data_collector = self.data_collector().await;
         let message_service = self.message_service();
@@ -1390,6 +1394,33 @@ As seen we have to:
 1. But in this case the calltree has the private `create_*` with a `Fn` argument.
 So this argument is updated too.
 1. Finally an `.await` is added in `main.rs` when getting the monitoring system.
+
+
+{% edition_note(edition="pre2024", summary="AsyncFn trait wasn't available", link="https://blog.rust-lang.org/2025/02/20/Rust-1.85.0.html#async-closures") %}
+Prior to Rust 2024, the `AsyncFn` trait family (`AsyncFn`, `AsyncFnMut`, and `AsyncFnOnce`) didn't exist in the standard library. Instead, we had to work with regular `Fn` traits that returned futures:
+
+```rust
+async fn create_data_collector<'a, F, L>(
+    &self,
+    configuration_manager: &ConfigurationManager,
+    logging_service_fn: impl Fn() -> F,
+) -> Box<dyn DataCollector + 'a>
+where
+    F: Future<Output = L>,
+    L: LoggingService + 'a,
+{
+    if let Some(api_key) = configuration_manager.get_api_key() {
+        let logging_service = logging_service_fn().await;
+        Box::new(ApiDataCollector::new(api_key.to_string(), logging_service))
+    } else {
+        // Other implementation...
+    }
+}
+```
+
+This pattern was more verbose and required explicitly defining the future type as a generic parameter.
+With Rust 2024, we can use the `AsyncFn` trait directly, making the code more concise and readable.
+{% end %}
 
 This update also makes it easier to see the public function are just boilerplate really.
 They have most of the updates but just have the job of linking the dependencies together correctly.
@@ -1492,7 +1523,7 @@ impl DependencyContainer {
 ### Lazy and Conditional Dependencies
 Sometimes a dependency in the chain might be conditionally needed.
 So we want to avoid creating the dependency in cases when it will not be needed.
-This is solved by using a `Fn` callback argument as seen for the `LoggingService`.
+This is solved by using a `Fn` / `AsyncFn` callback argument as seen for the `LoggingService`.
 
 ```rust
 impl DependencyContainer {
@@ -1532,10 +1563,6 @@ This is a lifetime that does require some changes.
 But we only have to add a field to `DependencyContainer` and update the public function by wrapping its content in a `get_or_init()` call.
 And we also create a method to easily make new scopes.
 
-Because these return a reference, we may also need to use the wildcard lifetime to correctly link with the `&self` argument's lifetime.
-But this is only if the return type is a `impl Trait` like `DataCollector`.
-It is not needed for concrete types like `ConfigurationManager`.
-
 ```rust
 struct DependencyContainer {
     impl_abstract: OnceCell<ConcreteType>, // Or OnceCell<Box<dyn Abstract + 'a>>
@@ -1556,7 +1583,7 @@ impl DependencyContainer {
         }
     }
 
-    pub fn impl_abstract_scoped(&self) -> impl Abstract + '_ {
+    pub fn impl_abstract_scoped(&self) -> impl Abstract {
         self.impl_abstract
             .get_or_init(|| {
                 let arg = self.scope_config;
@@ -1580,7 +1607,7 @@ impl<T: Abstract + ?Sized> Abstract for &T
 ```
 
 ### Singleton Dependencies
-A singleton has the same pattern as a scope and also has the same wildcard lifetime need.
+A singleton has the same pattern as a scope.
 Except that it needs to clone the `OnceCell` when a new scope is created.
 This requires wrapping the `OnceCell` in a `Rc`.
 
@@ -1602,7 +1629,7 @@ impl DependencyContainer {
         }
     }
 
-    pub fn impl_abstract_singleton(&self) -> impl Abstract + '_ {
+    pub fn impl_abstract_singleton(&self) -> impl Abstract {
         self.impl_abstract
             .get_or_init(|| {
                 let arg = self.config;
