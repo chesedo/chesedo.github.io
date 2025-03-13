@@ -1,6 +1,7 @@
 +++
 title = "Mastering Dependency Injection in Rust: Despatma with Lifetimes"
 description = "Learn how to use despatma to manage singleton, scoped, and transient dependencies in Rust. Explore practical examples and best practices for effective dependency lifetime management in your Rust applications."
+updated = 2025-03-13
 [taxonomies]
 tags = ["Rust", "Dependency Injection", "Software Design", "DesPatMa", "Software Architecture"]
 categories = ["Rust Dependency Injection"]
@@ -186,7 +187,7 @@ Using despatma for dependency lifetime management provides several key benefits:
 
 While despatma now supports various dependency lifetimes, it's worth noting that lazy dependencies are not yet implemented.
 This feature is planned for a future release, pending some upcoming Rust language features.
-Specifically, we're waiting for improvements like `impl` return types in `impl Fn`, expected to arrive in Rust 2024.
+Specifically, we're waiting for improvements like `impl` return types in `impl Fn`.
 These enhancements will allow for more elegant and flexible lazy dependency implementations.
 
 For more advanced usage scenarios and practical examples of despatma in action, be sure to check out the [examples in the despatma repository](https://github.com/chesedo/despatma/tree/main/despatma/examples).
