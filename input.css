@@ -22,7 +22,7 @@ h6 {
   line-height: 0.6em;
 }
 
-.mermaid-diagram {
+.mermaid-diagram, .excalidraw-diagram {
   @apply my-8 mx-auto max-w-full overflow-x-auto;
 }
 
