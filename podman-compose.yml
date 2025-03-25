@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   kroki:
     image: docker.io/yuzutech/kroki
@@ -6,8 +6,10 @@ services:
       - "8000:8000"
     environment:
       - KROKI_MERMAID_HOST=kroki-mermaid
+      - KROKI_EXCALIDRAW_HOST=kroki-excalidraw
     depends_on:
       - kroki-mermaid
+      - kroki-excalidraw
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 10s
@@ -16,3 +18,6 @@ services:
 
   kroki-mermaid:
     image: docker.io/yuzutech/kroki-mermaid
+
+  kroki-excalidraw:
+    image: docker.io/yuzutech/kroki-excalidraw

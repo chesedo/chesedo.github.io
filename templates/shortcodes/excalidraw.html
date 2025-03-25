@@ -1,0 +1,27 @@
+{#
+  Excalidraw diagram shortcode
+
+  Usage:
+    {% excalidraw() %}
+    // Excalidraw JSON or compatible content
+    {% end %}
+
+  This shortcode uses the Kroki service to render Excalidraw diagrams as SVG.
+  It sends the diagram content to a local Kroki instance and displays the resulting SVG.
+
+  The shortcode also fixes font URLs in the SVG output, replacing the "undefined" version
+  with the correct version number to ensure proper rendering of hand-drawn text effects.
+  This should be fixed in version 0.18.0 of Excalidraw.
+#}
+
+{% set postdata = load_data(url="http://localhost:8000/excalidraw/svg", format="plain", method="POST", content_type="text/plain", body=body) %}
+
+{% set adjusted_svg = postdata |
+   replace(from='<svg ', to='<svg preserveAspectRatio="xMinYMin meet" ') |
+   replace(from='https://unpkg.com/@excalidraw/excalidraw@undefined/dist/excalidraw-assets/',
+           to='https://unpkg.com/@excalidraw/excalidraw@0.17.6/dist/excalidraw-assets/')
+%}
+
+<div class="excalidraw-diagram">
+  {{adjusted_svg|safe}}
+</div>
