@@ -82,12 +82,12 @@ In traditional asynchronous I/O models like epoll:
 With io\_uring, applications:
 
 1. Submit I/O requests to a submission queue that is shared with the kernel
-2. The kernel processes these requests asynchronously. Ie the application does not make a separate system call to perform the I/O.
+2. The kernel processes these requests asynchronously after being notified with a single syscall (io\_uring\_enter)
 3. Results appear in a completion queue
 
 The key advantages include:
 
-- **Reduced context switches**: Applications can submit multiple I/O operations with a single system call
+- **Reduced syscalls**: Applications can submit multiple I/O operations with a single syscall rather than separate syscalls for each operation
 - **Batched operations**: Multiple operations can be processed in batches
 - **True asynchronous file I/O**: Unlike traditional interfaces, io\_uring enables genuinely asynchronous file operations
 - **Zero-copy operation**: The kernel can directly access application buffers
