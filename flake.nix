@@ -138,8 +138,8 @@
             echo -e "\033[1;32m# Useful development tips:\033[0m"
             echo -e "  • View your site at \033[4;94mhttp://127.0.0.1:1111\033[0m"
             echo -e "  • Press Ctrl+C to stop the development servers"
-            echo -e "  • Run \033[1;37mnix build --option sandbox false\033[0m to build the production version of the site"
-            echo -e "  • Run \033[1;37mnix flake check --option sandbox false\033[0m to verify everything builds correctly"
+            echo -e "  • Run \033[1;37mnix build --no-sandbox\033[0m to build the production version of the site"
+            echo -e "  • Run \033[1;37mnix flake check --no-sandbox\033[0m to verify everything builds correctly"
             echo ""
           '';
         };
