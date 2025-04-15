@@ -1,23 +1,6 @@
 {
-  "scripts": {
-    "build:js": "cp node_modules/sandy-image/sandy* ./static/",
-    "build:css": "tailwindcss -i input.css -o static/css/styles.css --minify",
-    "build:zola": "zola build",
-    "build": "npm run build:js && npm run build:css && npm run build:zola",
-    "check:content": "./scripts/check_content.sh",
-    "check:lh": "lhci autorun",
-    "check": "npm run check:content",
-    "clean:content": "kondo --all content",
-    "clean:compose": "podman-compose down",
-    "clean": "npm run clean:content && npm run clean:compose",
-    "watch": "tailwindcss -i input.css -o static/css/styles.css --watch",
-    "serve": "zola serve",
-    "dev": "npm run dev:kroki && concurrently \"npm run watch\" \"npm run serve\"",
-    "dev:kroki": "podman-compose up -d"
-  },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.13",
-    "concurrently": "^8.2.2",
     "sandy-image": "^1.0.6",
     "tailwindcss": "^3.4.3"
   },
