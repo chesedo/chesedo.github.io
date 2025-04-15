@@ -31,7 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Setup Node.js
       - uses: DeterminateSystems/nix-installer-action@main
       - name: Start Kroki services
         run: docker compose --file podman-compose.yml up --wait --quiet-pull
