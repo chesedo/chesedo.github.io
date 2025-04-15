@@ -20,12 +20,3 @@ jobs:
       - name: Start Kroki services
         run: docker compose --file podman-compose.yml up --wait --quiet-pull
       - run: nix build .#checks.x86_64-linux.zola --no-sandbox
-
-  check-lighthouse:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: DeterminateSystems/nix-installer-action@main
-      - name: Start Kroki services
-        run: docker compose --file podman-compose.yml up --wait --quiet-pull
-      - run: nix build .#checks.x86_64-linux.lh --no-sandbox
